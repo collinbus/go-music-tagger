@@ -50,3 +50,13 @@ func TestReadFileShouldFailIfFileIsTooSmall(t *testing.T) {
 		t.Errorf("Read file should return error: %s", expectedError)
 	}
 }
+
+func TestReadFileShouldReadStreamInfoCorrectly(t *testing.T) {
+	fileReader := NewFileReader()
+
+	file, _ := fileReader.ReadFile(filePath)
+
+	if file.StreamInfo == nil {
+		t.Error("Stream info should not be nil")
+	}
+}
