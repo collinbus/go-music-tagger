@@ -21,6 +21,6 @@ func (streamInfo *StreamInfo) readStreamInfo(streamInfoData []byte) {
 	streamInfo.MinimumSampleBlockSize = binary.BigEndian.Uint16(streamInfoData[0:2])
 	streamInfo.MaximumSampleBlockSize = binary.BigEndian.Uint16(streamInfoData[2:4])
 
-	streamInfo.MinimumFrameSize = readBigEndian24BitAsUint32(streamInfoData[4:7])
-	streamInfo.MaximumFrameSize = readBigEndian24BitAsUint32(streamInfoData[7:10])
+	streamInfo.MinimumFrameSize = readBigEndianUint32(streamInfoData[4:7], 8)
+	streamInfo.MaximumFrameSize = readBigEndianUint32(streamInfoData[7:10], 8)
 }
