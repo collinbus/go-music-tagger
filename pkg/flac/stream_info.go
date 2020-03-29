@@ -24,9 +24,3 @@ func (streamInfo *StreamInfo) readStreamInfo(streamInfoData []byte) {
 	streamInfo.MinimumFrameSize = readBigEndian24BitAsUint32(streamInfoData[4:7])
 	streamInfo.MaximumFrameSize = readBigEndian24BitAsUint32(streamInfoData[7:10])
 }
-
-func readBigEndian24BitAsUint32(bytes []byte) uint32 {
-	var number = []byte{0x00}
-	number = append(number, bytes...)
-	return binary.BigEndian.Uint32(number)
-}
