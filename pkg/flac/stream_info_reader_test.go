@@ -5,17 +5,17 @@ import (
 	"testing"
 )
 
-func readStreamInfoFrom() []byte {
+func readStreamInfoFromFile() []byte {
 	file, _ := ioutil.ReadFile(filePath)
 	return file[8:42]
 }
 
 func TestReadSampleDataFromFlacStreamInfo(t *testing.T) {
 	expectedBlockSize := uint16(4096)
-	data := readStreamInfoFrom()
-	reader := NewStreamInfoReader()
+	data := readStreamInfoFromFile()
+	info := NewStreamInfo()
 
-	info := reader.readStreamInfo(data)
+	info.readStreamInfo(data)
 
 	if info.MinimumSampleBlockSize != expectedBlockSize {
 		t.Errorf("Expected minimum sample block size %d, but was %d", expectedBlockSize, info.MinimumSampleBlockSize)

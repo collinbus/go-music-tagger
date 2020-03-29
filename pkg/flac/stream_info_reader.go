@@ -2,15 +2,11 @@ package flac
 
 import "encoding/binary"
 
-type StreamInfoReader struct{}
-
-func (*StreamInfoReader) readStreamInfo(streamInfoData []byte) *StreamInfo {
-	minimumSampleBlockSize := binary.BigEndian.Uint16(streamInfoData[0:2])
-	maximumSampleBlockSize := binary.BigEndian.Uint16(streamInfoData[2:4])
-
-	return NewStreamInfo(maximumSampleBlockSize, minimumSampleBlockSize)
+type StreamInfoReader interface {
+	readStreamInfo(streamInfoData []byte)
 }
 
-func NewStreamInfoReader() *StreamInfoReader {
-	return &StreamInfoReader{}
+func (streamInfo *StreamInfo) readStreamInfo(streamInfoData []byte) {
+	streamInfo.MinimumSampleBlockSize = binary.BigEndian.Uint16(streamInfoData[0:2])
+	streamInfo.MaximumSampleBlockSize = binary.BigEndian.Uint16(streamInfoData[2:4])
 }

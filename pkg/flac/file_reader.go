@@ -22,7 +22,8 @@ func (fr *FileReader) ReadFile(path string) (*File, error) {
 		return nil, errors.New("file at " + path + " is not a flac file")
 	}
 
-	info := fr.streamInfoReader.readStreamInfo(fileBytes)
+	info := NewStreamInfo()
+	info.readStreamInfo(fileBytes)
 
 	flacFile := NewFile(info, len(fileBytes))
 	return flacFile, nil
