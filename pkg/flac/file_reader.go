@@ -8,7 +8,7 @@ import (
 var flacFileIdentifier = []byte{0x66, 0x4C, 0x61, 0x43}
 
 type FileReader struct {
-	streamInfoReader *StreamInfoReader
+	streamInfoReader StreamInfoReader
 }
 
 func (fr *FileReader) ReadFile(path string) (*File, error) {
@@ -22,10 +22,9 @@ func (fr *FileReader) ReadFile(path string) (*File, error) {
 		return nil, errors.New("file at " + path + " is not a flac file")
 	}
 
-	info := NewStreamInfo()
-	info.readStreamInfo(fileBytes)
+	info := fr.streamInfoReader.NewStreamInfo(fileBytes[8:42])
 
-	flacFile := NewFile(info, len(fileBytes))
+	flacFile := NewFile(&info, len(fileBytes))
 	return flacFile, nil
 }
 
@@ -42,6 +41,8 @@ func isFlacFile(data []byte) bool {
 	return true
 }
 
-func NewFileReader() *FileReader {
-	return &FileReader{}
+func NewFileReader(reader StreamInfoReader) *FileReader {
+	return &FileReader{
+		streamInfoReader: reader,
+	}
 }

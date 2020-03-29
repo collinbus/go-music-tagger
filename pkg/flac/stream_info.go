@@ -12,15 +12,11 @@ type StreamInfo struct {
 	AudioDataMD5Hash       []byte
 }
 
-func NewStreamInfo() *StreamInfo {
-	return &StreamInfo{}
-}
-
 type StreamInfoReader interface {
-	readStreamInfo(streamInfoData []byte)
+	NewStreamInfo(streamInfoData []byte) StreamInfo
 }
 
-func (streamInfo *StreamInfo) readStreamInfo(streamInfoData []byte) {
+func (streamInfo *StreamInfo) NewStreamInfo(streamInfoData []byte) StreamInfo {
 	streamInfo.MinimumSampleBlockSize = readBigEndianUint16(streamInfoData[0:2])
 	streamInfo.MaximumSampleBlockSize = readBigEndianUint16(streamInfoData[2:4])
 
@@ -33,4 +29,6 @@ func (streamInfo *StreamInfo) readStreamInfo(streamInfoData []byte) {
 
 	streamInfo.NumberOfSamples = readBigEndianUint64(streamInfoData[13:21], 4, 24)
 	streamInfo.AudioDataMD5Hash = streamInfoData[18:34]
+
+	return *streamInfo
 }
