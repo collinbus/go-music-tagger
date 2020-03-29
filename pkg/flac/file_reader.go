@@ -11,11 +11,6 @@ type FileReader struct {
 	streamInfoReader *StreamInfoReader
 }
 
-type File struct {
-	StreamInfo *StreamInfo
-	Size       int
-}
-
 func (fr *FileReader) ReadFile(path string) (*File, error) {
 	fileBytes, err := ioutil.ReadFile(path)
 
@@ -29,10 +24,8 @@ func (fr *FileReader) ReadFile(path string) (*File, error) {
 
 	info := fr.streamInfoReader.readStreamInfo()
 
-	return &File{
-		StreamInfo: info,
-		Size:       len(fileBytes),
-	}, nil
+	flacFile := NewFile(info, len(fileBytes))
+	return flacFile, nil
 }
 
 func isFlacFile(data []byte) bool {
