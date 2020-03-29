@@ -7,12 +7,7 @@ func readBigEndianUint16(bytes []byte) uint16 {
 }
 
 func readBigEndianUint32(bytes []byte, offset int) uint32 {
-	var number []byte
-	bytesToBeAdded := offset / 8
-	for i := 0; i < bytesToBeAdded; i++ {
-		number = append(number, 0x00)
-	}
-
-	number = append(number, bytes...)
-	return binary.BigEndian.Uint32(number)
+	numberBeforeShift := binary.BigEndian.Uint32(bytes)
+	number := numberBeforeShift >> offset
+	return number
 }

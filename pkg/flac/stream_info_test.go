@@ -40,3 +40,15 @@ func TestReadFrameSizeFromFlacStreamInfo(t *testing.T) {
 		t.Errorf("Expected maximum frame size %d, but was %d", expectedMaximumFrameSize, info.MaximumFrameSize)
 	}
 }
+
+func TestReadSampleRateFromFlacStreamInfo(t *testing.T) {
+	expectedSampleRate := uint32(44100)
+	data := readStreamInfoFromFile()
+	info := NewStreamInfo()
+
+	info.readStreamInfo(data)
+
+	if info.SampleRate != expectedSampleRate {
+		t.Errorf("Expected minimum frame size %d, but was %d", expectedSampleRate, info.SampleRate)
+	}
+}
