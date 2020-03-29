@@ -2,17 +2,20 @@ package flac
 
 import (
 	"io/ioutil"
-	"log"
 )
 
 type File struct {
 	Size int
 }
 
-func ReadFile(path string) File {
-	bytes, _ := ioutil.ReadFile(path)
+func ReadFile(path string) (*File, error) {
+	bytes, err := ioutil.ReadFile(path)
 
-	return File{
-		Size: len(bytes),
+	if err != nil {
+		return nil, err
 	}
+
+	return &File{
+		Size: len(bytes),
+	}, nil
 }
