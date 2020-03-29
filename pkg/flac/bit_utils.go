@@ -20,3 +20,10 @@ func readBigEndianUint32(bytes []byte, offset int) uint32 {
 	number := numberBeforeShift >> offset
 	return number
 }
+
+func readBigEndianUint64(bytes []byte, startOffset int, endOffset int) uint64 {
+	numberBeforeShift := binary.BigEndian.Uint64(bytes)
+	numberWithoutEndOffset := numberBeforeShift << startOffset
+	number := numberWithoutEndOffset >> (startOffset + endOffset)
+	return uint64(number)
+}

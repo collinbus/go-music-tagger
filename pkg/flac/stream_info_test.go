@@ -68,3 +68,15 @@ func TestReadNumberOfChannelsAndBitsPerSampleFlacStreamInfo(t *testing.T) {
 		t.Errorf("Expected bits per sample %d, but was %d", expectedBitsPerSample, info.BitsPerSample)
 	}
 }
+
+func TestReadNumberOfSamplesFromFlacStreamInfo(t *testing.T) {
+	expectedNumberOfSamples := uint64(13559280)
+	data := readStreamInfoFromFile()
+	info := NewStreamInfo()
+
+	info.readStreamInfo(data)
+
+	if info.NumberOfSamples != expectedNumberOfSamples {
+		t.Errorf("Expected number of samples %d, but was %d", expectedNumberOfSamples, info.NumberOfSamples)
+	}
+}

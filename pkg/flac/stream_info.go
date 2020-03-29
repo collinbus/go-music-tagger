@@ -8,6 +8,7 @@ type StreamInfo struct {
 	SampleRate             uint32
 	NumberOfChannels       uint8
 	BitsPerSample          uint8
+	NumberOfSamples        uint64
 }
 
 func NewStreamInfo() *StreamInfo {
@@ -28,4 +29,6 @@ func (streamInfo *StreamInfo) readStreamInfo(streamInfoData []byte) {
 	streamInfo.SampleRate = readBigEndianUint32(streamInfoData[10:14], 12)
 	streamInfo.NumberOfChannels = readBigEndianUint8(streamInfoData[12:14], 4, 9) + 1
 	streamInfo.BitsPerSample = readBigEndianUint8(streamInfoData[12:14], 7, 4) + 1
+
+	streamInfo.NumberOfSamples = readBigEndianUint64(streamInfoData[13:21], 4, 24)
 }
