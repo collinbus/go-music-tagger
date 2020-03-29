@@ -80,3 +80,17 @@ func TestReadNumberOfSamplesFromFlacStreamInfo(t *testing.T) {
 		t.Errorf("Expected number of samples %d, but was %d", expectedNumberOfSamples, info.NumberOfSamples)
 	}
 }
+
+func TestReadMD5AudioDataHashFromFlacStreamInfo(t *testing.T) {
+	expectedHash := []byte{0x7E, 0x86, 0x3E, 0x21, 0x8C, 0x83, 0x11, 0xE8, 0xE7, 0x35, 0x4F, 0xD1, 0x63, 0xBC, 0xAA, 0xD2}
+	data := readStreamInfoFromFile()
+	info := NewStreamInfo()
+
+	info.readStreamInfo(data)
+
+	for i, b := range expectedHash {
+		if info.AudioDataMD5Hash[i] != b {
+			t.Error("Audio data hashes do not correspond")
+		}
+	}
+}

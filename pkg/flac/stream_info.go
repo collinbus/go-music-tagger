@@ -9,6 +9,7 @@ type StreamInfo struct {
 	NumberOfChannels       uint8
 	BitsPerSample          uint8
 	NumberOfSamples        uint64
+	AudioDataMD5Hash       []byte
 }
 
 func NewStreamInfo() *StreamInfo {
@@ -31,4 +32,5 @@ func (streamInfo *StreamInfo) readStreamInfo(streamInfoData []byte) {
 	streamInfo.BitsPerSample = readBigEndianUint8(streamInfoData[12:14], 7, 4) + 1
 
 	streamInfo.NumberOfSamples = readBigEndianUint64(streamInfoData[13:21], 4, 24)
+	streamInfo.AudioDataMD5Hash = streamInfoData[18:34]
 }
