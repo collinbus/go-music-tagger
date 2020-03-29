@@ -1,8 +1,10 @@
 package flac
 
 type StreamInfo struct {
-	MaximumSampleBlockSize uint16
 	MinimumSampleBlockSize uint16
+	MaximumSampleBlockSize uint16
+	MinimumFrameSize       uint32
+	MaximumFrameSize       uint32
 }
 
 func NewStreamInfo() *StreamInfo {

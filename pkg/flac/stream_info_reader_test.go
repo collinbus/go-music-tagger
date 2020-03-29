@@ -24,3 +24,19 @@ func TestReadSampleDataFromFlacStreamInfo(t *testing.T) {
 		t.Errorf("Expected maximum sample block size %d, but was %d", expectedBlockSize, info.MaximumSampleBlockSize)
 	}
 }
+
+func TestReadFrameSizeFromFlacStreamInfo(t *testing.T) {
+	expectedMinimumFrameSize := uint32(14)
+	expectedMaximumFrameSize := uint32(13616)
+	data := readStreamInfoFromFile()
+	info := NewStreamInfo()
+
+	info.readStreamInfo(data)
+
+	if info.MinimumFrameSize != expectedMinimumFrameSize {
+		t.Errorf("Expected minimum frame size %d, but was %d", expectedMinimumFrameSize, info.MinimumFrameSize)
+	}
+	if info.MaximumFrameSize != expectedMaximumFrameSize {
+		t.Errorf("Expected maximum frame size %d, but was %d", expectedMaximumFrameSize, info.MaximumFrameSize)
+	}
+}
