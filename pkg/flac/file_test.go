@@ -3,6 +3,7 @@ package flac
 import "testing"
 
 const filePath = "../../assets/clocks.flac"
+const lyricsFilePath = "../../assets/lyrics.txt"
 
 func TestReadFileShouldReturnCorrectFileSizeAndBytes(t *testing.T) {
 	expectedFileSize := 35804910
@@ -19,6 +20,16 @@ func TestReadFileShouldReturnErrorWhenPathIsInvalid(t *testing.T) {
 	expectedError := "open a wrong path: The system cannot find the file specified."
 
 	_, err := ReadFile(wrongPath)
+
+	if err == nil || err.Error() != expectedError {
+		t.Errorf("Read file should return error: %s", expectedError)
+	}
+}
+
+func TestReadFileShouldFailIfFileIsNotFlacFile(t *testing.T) {
+	expectedError := "file at " + lyricsFilePath + " is not a flac file"
+
+	_, err := ReadFile(lyricsFilePath)
 
 	if err == nil || err.Error() != expectedError {
 		t.Errorf("Read file should return error: %s", expectedError)
