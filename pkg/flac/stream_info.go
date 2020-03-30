@@ -1,6 +1,7 @@
 package flac
 
 type StreamInfo struct {
+	BlockInfo              BlockInfo
 	MinimumSampleBlockSize uint16
 	MaximumSampleBlockSize uint16
 	MinimumFrameSize       uint32

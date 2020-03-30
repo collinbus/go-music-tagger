@@ -41,6 +41,7 @@ func (fr *FileReader) ReadFile(path string) (*File, error) {
 	blocks := readMetaDataBlockInfo(fileBytes)
 
 	info := &StreamInfo{}
+	info.BlockInfo = blocks[0]
 	fr.metaDataReader.Read(fileBytes[8:42], info)
 
 	seekTable := &SeekTable{}
@@ -60,7 +61,7 @@ func readMetaDataBlockInfo(data []byte) map[int]BlockInfo {
 		blockId := readBlockId(data[index])
 		blockSize := readBigEndianUint32(data[index+1:index+5], 8)
 		isLastBlock := readIsLastBlock(data[index])
-		blocks[blockId] = BlockInfo{StartIndex: index, Length: blockSize, isLastBlock: isLastBlock}
+		blocks[blockId] = BlockInfo{StartIndex: index + sizeOffset, Length: blockSize, isLastBlock: isLastBlock}
 
 		if isLastBlock {
 			break

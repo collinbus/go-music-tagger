@@ -67,15 +67,24 @@ func TestReadFileShouldReadStreamInfoCorrectly(t *testing.T) {
 	}
 }
 
-func TestPassCorrectNumberOfBytesToStreamInfoReader(t *testing.T) {
-	streamInfoLength = 0
-	expectedNumberOfBytes := 34
+func TestPassCorrectSizeStartAndLastBlockInfoToStreamInfoReader(t *testing.T) {
+	expectedNumberOfBytes := uint32(34)
+	expectedStartIndex := 8
 	fileReader := NewFileReader(MockStreamInfo{})
 
-	_, _ = fileReader.ReadFile(filePath)
+	file, _ := fileReader.ReadFile(filePath)
 
-	if streamInfoLength != expectedNumberOfBytes {
-		t.Errorf("Expected number of bytes passed to stream info reader %d, but was %d", expectedNumberOfBytes, streamInfoLength)
+	blockLength := file.StreamInfo.BlockInfo.Length
+	start := file.StreamInfo.BlockInfo.StartIndex
+	isLastBlock := file.StreamInfo.BlockInfo.isLastBlock
+	if blockLength != expectedNumberOfBytes {
+		t.Errorf("Expected size of stream info %d, but was %d", expectedNumberOfBytes, blockLength)
+	}
+	if start != expectedStartIndex {
+		t.Errorf("Expected start index of stream info %d, but was %d", expectedNumberOfBytes, start)
+	}
+	if isLastBlock {
+		t.Error("StreamInfo should not be the latest block of the metadata")
 	}
 }
 
