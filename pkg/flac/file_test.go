@@ -1,16 +1,12 @@
 package flac
 
 import (
-	"reflect"
 	"testing"
 )
 
 const filePath = "../../assets/clocks.flac"
 const lyricsFilePath = "../../assets/lyrics.txt"
 const emptyFilePath = "../../assets/empty.txt"
-
-var streamInfoLength = 0
-var seekTableLength = 0
 
 func TestReadFileShouldReturnCorrectFileSizeAndBytes(t *testing.T) {
 	expectedFileSize := 35804910
@@ -111,13 +107,6 @@ func TestPassCorrectSizeStartAndLastBlockInfoToSeekTable(t *testing.T) {
 
 type MockStreamInfo struct{}
 
-func (mock MockStreamInfo) Read(data []byte, target interface{}) {
-	typeOf := reflect.TypeOf(target)
-	typeString := typeOf.String()
-	switch typeString {
-	case "*flac.StreamInfo":
-		streamInfoLength = len(data)
-	case "*flac.SeekTable":
-		seekTableLength = len(data)
-	}
+func (mock MockStreamInfo) Read(_ []byte, _ interface{}) {
+
 }
