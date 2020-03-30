@@ -15,7 +15,7 @@ func TestReadSampleDataFromFlacStreamInfo(t *testing.T) {
 	data := readStreamInfoFromFile()
 	info := StreamInfo{}
 
-	info.NewStreamInfo(data)
+	info.Read(data)
 
 	if info.MinimumSampleBlockSize != expectedBlockSize {
 		t.Errorf("Expected minimum sample block size %d, but was %d", expectedBlockSize, info.MinimumSampleBlockSize)
@@ -31,7 +31,7 @@ func TestReadFrameSizeFromFlacStreamInfo(t *testing.T) {
 	data := readStreamInfoFromFile()
 	info := StreamInfo{}
 
-	info.NewStreamInfo(data)
+	info.Read(data)
 
 	if info.MinimumFrameSize != expectedMinimumFrameSize {
 		t.Errorf("Expected minimum frame size %d, but was %d", expectedMinimumFrameSize, info.MinimumFrameSize)
@@ -46,7 +46,7 @@ func TestReadSampleRateFromFlacStreamInfo(t *testing.T) {
 	data := readStreamInfoFromFile()
 	info := StreamInfo{}
 
-	info.NewStreamInfo(data)
+	info.Read(data)
 
 	if info.SampleRate != expectedSampleRate {
 		t.Errorf("Expected minimum frame size %d, but was %d", expectedSampleRate, info.SampleRate)
@@ -59,7 +59,7 @@ func TestReadNumberOfChannelsAndBitsPerSampleFlacStreamInfo(t *testing.T) {
 	data := readStreamInfoFromFile()
 	info := StreamInfo{}
 
-	info.NewStreamInfo(data)
+	info.Read(data)
 
 	if info.NumberOfChannels != expectedNumberOfChannels {
 		t.Errorf("Expected number of channels %d, but was %d", expectedNumberOfChannels, info.NumberOfChannels)
@@ -74,7 +74,7 @@ func TestReadNumberOfSamplesFromFlacStreamInfo(t *testing.T) {
 	data := readStreamInfoFromFile()
 	info := StreamInfo{}
 
-	info.NewStreamInfo(data)
+	info.Read(data)
 
 	if info.NumberOfSamples != expectedNumberOfSamples {
 		t.Errorf("Expected number of samples %d, but was %d", expectedNumberOfSamples, info.NumberOfSamples)
@@ -86,7 +86,7 @@ func TestReadMD5AudioDataHashFromFlacStreamInfo(t *testing.T) {
 	data := readStreamInfoFromFile()
 	info := StreamInfo{}
 
-	info.NewStreamInfo(data)
+	info.Read(data)
 
 	for i, b := range expectedHash {
 		if info.AudioDataMD5Hash[i] != b {

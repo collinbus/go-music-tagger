@@ -77,7 +77,6 @@ func TestPassCorrectNumberOfBytesToStreamInfoReader(t *testing.T) {
 
 type MockStreamInfo struct{}
 
-func (mock MockStreamInfo) NewStreamInfo(streamInfoData []byte) StreamInfo {
-	streamInfoLength = len(streamInfoData)
-	return StreamInfo{}
+func (mock MockStreamInfo) Read(data []byte, target interface{}) {
+	streamInfoLength = len(data)
 }
