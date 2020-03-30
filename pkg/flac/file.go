@@ -45,8 +45,9 @@ func (fr *FileReader) ReadFile(path string) (*File, error) {
 	fr.metaDataReader.Read(fileBytes[8:42], info)
 
 	seekTable := &SeekTable{}
-	start := blocks[3].StartIndex
-	end := start + int(blocks[3].Length)
+	seekTable.BlockInfo = blocks[3]
+	start := seekTable.BlockInfo.StartIndex
+	end := seekTable.BlockInfo.StartIndex + int(seekTable.BlockInfo.Length)
 	fr.metaDataReader.Read(fileBytes[start:end], seekTable)
 
 	flacFile := NewFile(info, seekTable, len(fileBytes))
