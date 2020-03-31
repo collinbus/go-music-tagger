@@ -1,6 +1,7 @@
 package flac
 
 import (
+	"bytes"
 	"io/ioutil"
 	"testing"
 )
@@ -43,5 +44,17 @@ func TestNumberFirstCommentInVorbisComment(t *testing.T) {
 
 	if vorbisComment.Comments[0] != expectedComment {
 		t.Errorf("Expected comment %s, but is%s", expectedComment, vorbisComment.Comments[0])
+	}
+}
+
+func TestNumberFourthCommentInVorbisComment(t *testing.T) {
+	file, _ := ioutil.ReadFile(lyricsFilePath)
+	expectedComment := bytes.NewBuffer(file).String()
+	vorbisComment, data := readVorbisCommentDataFromFile()
+
+	vorbisComment.Read(data)
+
+	if vorbisComment.Comments[3] != expectedComment {
+		t.Errorf("Expected comment: \n%s\nbut is:\n%s", expectedComment, vorbisComment.Comments[3])
 	}
 }
