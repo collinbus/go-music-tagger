@@ -16,10 +16,13 @@ func (s *SeekTable) Read(data []byte) {
 	numberOfSeekPoints := s.BlockInfo.length / 18
 	s.NumberOfSeekPoints = int(numberOfSeekPoints)
 
-	seekPoint := SeekPoint{
-		FirstSampleNumber:    readBigEndianUint64(data[0:8], 0, 0),
-		Offset:               readBigEndianUint64(data[8:16], 0, 0),
-		NumberOfTargetFrames: readBigEndianUint16(data[16:18]),
+	for i := 0; i < s.NumberOfSeekPoints; i++ {
+		index := i * 18
+		seekPoint := SeekPoint{
+			FirstSampleNumber:    readBigEndianUint64(data[index:index+8], 0, 0),
+			Offset:               readBigEndianUint64(data[index+8:index+16], 0, 0),
+			NumberOfTargetFrames: readBigEndianUint16(data[index+16 : index+18]),
+		}
+		s.SeekPoints = append(s.SeekPoints, seekPoint)
 	}
-	s.SeekPoints = append(s.SeekPoints, seekPoint)
 }
