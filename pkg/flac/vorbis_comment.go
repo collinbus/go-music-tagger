@@ -19,13 +19,22 @@ func NewVorbisComment(blockInfo *BlockInfo) *VorbisComment {
 }
 
 func (vc *VorbisComment) Read(data []byte) {
-	vendorLength := binary.LittleEndian.Uint32(data[:sizeOffset])
-	buffer := bytes.NewBuffer(data[sizeOffset : vendorLength+sizeOffset])
-	vc.Vendor = buffer.String()
-	length := binary.LittleEndian.Uint32(data[sizeOffset+vendorLength : vendorLength+2*sizeOffset])
-	vc.NumberOfComments = int(length)
+	vendorLength := vc.readVendor(data)
+	vc.updateLength(data, vendorLength)
 
 	vc.readComments(data[2*sizeOffset+vendorLength:])
+}
+
+func (vc *VorbisComment) updateLength(data []byte, vendorLength uint32) {
+	length := binary.LittleEndian.Uint32(data[sizeOffset+vendorLength : vendorLength+2*sizeOffset])
+	vc.NumberOfComments = int(length)
+}
+
+func (vc *VorbisComment) readVendor(data []byte) uint32 {
+	vendorLength := binary.LittleEndian.Uint32(data[:sizeOffset])
+	vendorBuffer := bytes.NewBuffer(data[sizeOffset : vendorLength+sizeOffset])
+	vc.Vendor = vendorBuffer.String()
+	return vendorLength
 }
 
 func (vc *VorbisComment) readComments(data []byte) {
