@@ -15,12 +15,12 @@ func readSeekTableDataFromFile() (*SeekTable, []byte) {
 
 func TestNumberOfSeekPointsInSeekTable(t *testing.T) {
 	expectedNumberOfSeekPoints := 31
-	seektTable, data := readSeekTableDataFromFile()
+	seekTable, data := readSeekTableDataFromFile()
 
-	seektTable.Read(data)
+	seekTable.Read(data)
 
-	if seektTable.NumberOfSeekPoints != expectedNumberOfSeekPoints {
-		t.Errorf("Expected number of seek points %d, but was %d", expectedNumberOfSeekPoints, seektTable.NumberOfSeekPoints)
+	if seekTable.NumberOfSeekPoints != expectedNumberOfSeekPoints {
+		t.Errorf("Expected number of seek points %d, but was %d", expectedNumberOfSeekPoints, seekTable.NumberOfSeekPoints)
 	}
 }
 
