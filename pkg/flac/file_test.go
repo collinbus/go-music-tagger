@@ -105,6 +105,27 @@ func TestPassCorrectSizeStartAndLastBlockInfoToSeekTable(t *testing.T) {
 	}
 }
 
+func TestPassCorrectSizeStartAndLastBlockInfoToVorbisComment(t *testing.T) {
+	expectedNumberOfBytes := uint32(1205)
+	expectedStartIndex := 608
+	fileReader := NewFileReader(MockStreamInfo{})
+
+	file, _ := fileReader.ReadFile(filePath)
+
+	blockLength := file.VorbisComment.BlockInfo.length
+	start := file.VorbisComment.BlockInfo.startIndex
+	isLastBlock := file.VorbisComment.BlockInfo.isLastBlock
+	if blockLength != expectedNumberOfBytes {
+		t.Errorf("Expected size of vorbis comment %d, but was %d", expectedNumberOfBytes, blockLength)
+	}
+	if start != expectedStartIndex {
+		t.Errorf("Expected start index of vorbis comment %d, but was %d", expectedNumberOfBytes, start)
+	}
+	if isLastBlock {
+		t.Error("Vorbis Comment should not be the latest block of the metadata")
+	}
+}
+
 type MockStreamInfo struct{}
 
 func (mock MockStreamInfo) Read(_ []byte) {

@@ -1,7 +1,7 @@
 package flac
 
 type StreamInfo struct {
-	BlockInfo              BlockInfo
+	BlockInfo              *BlockInfo
 	MinimumSampleBlockSize uint16
 	MaximumSampleBlockSize uint16
 	MinimumFrameSize       uint32
@@ -11,6 +11,10 @@ type StreamInfo struct {
 	BitsPerSample          uint8
 	NumberOfSamples        uint64
 	AudioDataMD5Hash       []byte
+}
+
+func NewStreamInfo(blockInfo *BlockInfo) *StreamInfo {
+	return &StreamInfo{BlockInfo: blockInfo}
 }
 
 func (streamInfo *StreamInfo) Read(data []byte) {

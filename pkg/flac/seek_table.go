@@ -7,9 +7,13 @@ type SeekPoint struct {
 }
 
 type SeekTable struct {
-	BlockInfo          BlockInfo
+	BlockInfo          *BlockInfo
 	NumberOfSeekPoints int
 	SeekPoints         []SeekPoint
+}
+
+func NewSeekTable(blockInfo *BlockInfo) *SeekTable {
+	return &SeekTable{BlockInfo: blockInfo}
 }
 
 func (s *SeekTable) Read(data []byte) {

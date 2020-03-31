@@ -8,13 +8,14 @@ import (
 var flacFileIdentifier = []byte{0x66, 0x4C, 0x61, 0x43}
 
 type File struct {
-	StreamInfo *StreamInfo
-	SeekTable  *SeekTable
-	Size       int
+	StreamInfo    *StreamInfo
+	SeekTable     *SeekTable
+	VorbisComment *VorbisComment
+	Size          int
 }
 
-func NewFile(info *StreamInfo, table *SeekTable, size int) *File {
-	return &File{StreamInfo: info, SeekTable: table, Size: size}
+func NewFile(size int) *File {
+	return &File{Size: size}
 }
 
 type BlockInfo struct {
@@ -39,30 +40,41 @@ func (fr *FileReader) ReadFile(path string) (*File, error) {
 	}
 
 	blocks := readMetaDataBlockInfo(fileBytes)
+	flacFile := NewFile(len(fileBytes))
 
-	info := &StreamInfo{}
-	info.BlockInfo = blocks[0]
-	info.Read(fileBytes[8:42])
+	for blockId, blockInfo := range blocks {
+		flacFile.readMetaData(fileBytes, blockId, blockInfo)
+	}
 
-	seekTable := &SeekTable{}
-	seekTable.BlockInfo = blocks[3]
-	start := seekTable.BlockInfo.startIndex
-	end := seekTable.BlockInfo.startIndex + int(seekTable.BlockInfo.length)
-	seekTable.Read(fileBytes[start:end])
-
-	flacFile := NewFile(info, seekTable, len(fileBytes))
 	return flacFile, nil
 }
 
-func readMetaDataBlockInfo(data []byte) map[int]BlockInfo {
+func (f *File) readMetaData(data []byte, blockId int, info *BlockInfo) {
+	start := info.startIndex
+	end := start + int(info.length)
+
+	switch blockId {
+	case 0:
+		f.StreamInfo = NewStreamInfo(info)
+		f.StreamInfo.Read(data[start:end])
+	case 3:
+		f.SeekTable = NewSeekTable(info)
+		f.SeekTable.Read(data[start:end])
+	case 4:
+		f.VorbisComment = NewVorbisComment(info)
+		f.VorbisComment.Read(data[start:end])
+	}
+}
+
+func readMetaDataBlockInfo(data []byte) map[int]*BlockInfo {
 	const sizeOffset = 4
 	var index = sizeOffset
-	blocks := make(map[int]BlockInfo)
+	blocks := make(map[int]*BlockInfo)
 	for {
 		blockId := readBlockId(data[index])
 		blockSize := readBigEndianUint32(data[index+1:index+5], 8)
 		isLastBlock := readIsLastBlock(data[index])
-		blocks[blockId] = BlockInfo{startIndex: index + sizeOffset, length: blockSize, isLastBlock: isLastBlock}
+		blocks[blockId] = &BlockInfo{startIndex: index + sizeOffset, length: blockSize, isLastBlock: isLastBlock}
 
 		if isLastBlock {
 			break

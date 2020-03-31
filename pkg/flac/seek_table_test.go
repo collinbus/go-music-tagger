@@ -8,7 +8,7 @@ import (
 func readSeekTableDataFromFile() (*SeekTable, []byte) {
 	seekTable := &SeekTable{}
 	data, _ := ioutil.ReadFile(filePath)
-	blockInfo := BlockInfo{length: 558, startIndex: 46, isLastBlock: false}
+	blockInfo := &BlockInfo{length: 558, startIndex: 46, isLastBlock: false}
 	seekTable.BlockInfo = blockInfo
 	return seekTable, data[46:604]
 }
