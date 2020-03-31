@@ -23,3 +23,23 @@ func TestNumberOfSeekPointsInSeekTable(t *testing.T) {
 		t.Errorf("Expected number of seek points %d, but was %d", expectedNumberOfSeekPoints, seektTable.NumberOfSeekPoints)
 	}
 }
+
+func TestFirstSeekPointInSeekTable(t *testing.T) {
+	expectedFirstSampleNumber := uint64(0)
+	expectedOffset := uint64(0)
+	expectedNumberOfTargetFrames := uint16(4096)
+	seekTable, data := readSeekTableDataFromFile()
+
+	seekTable.Read(data)
+
+	seekPoint := seekTable.SeekPoints[0]
+	if seekPoint.FirstSampleNumber != expectedFirstSampleNumber {
+		t.Errorf("Expected first sample number %d, but was %d", expectedFirstSampleNumber, seekPoint.FirstSampleNumber)
+	}
+	if seekPoint.Offset != expectedOffset {
+		t.Errorf("Expected offset %d, but was %d", expectedOffset, seekPoint.Offset)
+	}
+	if seekPoint.NumberOfTargetFrames != expectedNumberOfTargetFrames {
+		t.Errorf("Expected number of target frames %d, but was %d", expectedNumberOfTargetFrames, seekPoint.NumberOfTargetFrames)
+	}
+}
