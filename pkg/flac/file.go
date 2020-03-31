@@ -18,8 +18,8 @@ func NewFile(info *StreamInfo, table *SeekTable, size int) *File {
 }
 
 type BlockInfo struct {
-	StartIndex  int
-	Length      uint32
+	startIndex  int
+	length      uint32
 	isLastBlock bool
 }
 
@@ -42,13 +42,13 @@ func (fr *FileReader) ReadFile(path string) (*File, error) {
 
 	info := &StreamInfo{}
 	info.BlockInfo = blocks[0]
-	fr.metaDataReader.Read(fileBytes[8:42], info)
+	info.Read(fileBytes[8:42])
 
 	seekTable := &SeekTable{}
 	seekTable.BlockInfo = blocks[3]
-	start := seekTable.BlockInfo.StartIndex
-	end := seekTable.BlockInfo.StartIndex + int(seekTable.BlockInfo.Length)
-	fr.metaDataReader.Read(fileBytes[start:end], seekTable)
+	start := seekTable.BlockInfo.startIndex
+	end := seekTable.BlockInfo.startIndex + int(seekTable.BlockInfo.length)
+	seekTable.Read(fileBytes[start:end])
 
 	flacFile := NewFile(info, seekTable, len(fileBytes))
 	return flacFile, nil
@@ -62,7 +62,7 @@ func readMetaDataBlockInfo(data []byte) map[int]BlockInfo {
 		blockId := readBlockId(data[index])
 		blockSize := readBigEndianUint32(data[index+1:index+5], 8)
 		isLastBlock := readIsLastBlock(data[index])
-		blocks[blockId] = BlockInfo{StartIndex: index + sizeOffset, Length: blockSize, isLastBlock: isLastBlock}
+		blocks[blockId] = BlockInfo{startIndex: index + sizeOffset, length: blockSize, isLastBlock: isLastBlock}
 
 		if isLastBlock {
 			break

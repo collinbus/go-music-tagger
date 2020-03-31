@@ -70,8 +70,8 @@ func TestPassCorrectSizeStartAndLastBlockInfoToStreamInfoReader(t *testing.T) {
 
 	file, _ := fileReader.ReadFile(filePath)
 
-	blockLength := file.StreamInfo.BlockInfo.Length
-	start := file.StreamInfo.BlockInfo.StartIndex
+	blockLength := file.StreamInfo.BlockInfo.length
+	start := file.StreamInfo.BlockInfo.startIndex
 	isLastBlock := file.StreamInfo.BlockInfo.isLastBlock
 	if blockLength != expectedNumberOfBytes {
 		t.Errorf("Expected size of stream info %d, but was %d", expectedNumberOfBytes, blockLength)
@@ -91,8 +91,8 @@ func TestPassCorrectSizeStartAndLastBlockInfoToSeekTable(t *testing.T) {
 
 	file, _ := fileReader.ReadFile(filePath)
 
-	blockLength := file.SeekTable.BlockInfo.Length
-	start := file.SeekTable.BlockInfo.StartIndex
+	blockLength := file.SeekTable.BlockInfo.length
+	start := file.SeekTable.BlockInfo.startIndex
 	isLastBlock := file.SeekTable.BlockInfo.isLastBlock
 	if blockLength != expectedNumberOfBytes {
 		t.Errorf("Expected size of seek table %d, but was %d", expectedNumberOfBytes, blockLength)
@@ -107,6 +107,6 @@ func TestPassCorrectSizeStartAndLastBlockInfoToSeekTable(t *testing.T) {
 
 type MockStreamInfo struct{}
 
-func (mock MockStreamInfo) Read(_ []byte, _ interface{}) {
+func (mock MockStreamInfo) Read(_ []byte) {
 
 }
