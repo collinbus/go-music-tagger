@@ -34,3 +34,14 @@ func TestNumberOfCommentsInVorbisComment(t *testing.T) {
 		t.Errorf("Expected number of comments %d, but is %d", expectedNumberOfConmments, vorbisComment.NumberOfComments)
 	}
 }
+
+func TestNumberFirstCommentInVorbisComment(t *testing.T) {
+	expectedComment := "album=A Rush Of Blood To The Head"
+	vorbisComment, data := readVorbisCommentDataFromFile()
+
+	vorbisComment.Read(data)
+
+	if vorbisComment.Comments[0] != expectedComment {
+		t.Errorf("Expected comment %s, but is%s", expectedComment, vorbisComment.Comments[0])
+	}
+}
