@@ -58,3 +58,14 @@ func TestNumberFourthCommentInVorbisComment(t *testing.T) {
 		t.Errorf("Expected comment: \n%s\nbut is:\n%s", expectedComment, vorbisComment.Comments[3])
 	}
 }
+
+func TestFifthCommentInVorbisComment(t *testing.T) {
+	expectedComment := "artist=Coldplay"
+	vorbisComment, data := readVorbisCommentDataFromFile()
+
+	vorbisComment.Read(data)
+
+	if vorbisComment.Comments[4] != expectedComment {
+		t.Errorf("Expected comment %s, but is %s", expectedComment, vorbisComment.Comments[4])
+	}
+}
