@@ -7,6 +7,8 @@ type Picture struct {
 	PictureType uint32
 	MimeType    string
 	Description string
+	Width       uint32
+	Height      uint32
 }
 
 func NewPicture(blockInfo *BlockInfo) *Picture {
@@ -30,4 +32,12 @@ func (p *Picture) Read(data []byte) {
 	index += 4
 	end = index + int(descriptionLength)
 	p.Description = bytes.NewBuffer(data[index:end]).String()
+
+	index = end
+	end += 4
+	p.Width = readBigEndianUint32(data[index:end], 0)
+
+	index = end
+	end += 4
+	p.Height = readBigEndianUint32(data[index:end], 0)
 }

@@ -45,3 +45,18 @@ func TestDescriptionOfPicture(t *testing.T) {
 		t.Errorf("Expected mime type %s, but was %s", expectedDescription, picture.Description)
 	}
 }
+
+func TestWidthAndHeightInPixelsOfPicture(t *testing.T) {
+	expectedWidth := uint32(0)
+	expectedHeight := uint32(0)
+	picture, data := readPictureDataFromFile()
+
+	picture.Read(data)
+
+	if picture.Width != expectedWidth {
+		t.Errorf("Expected width %d, but was %d", expectedWidth, picture.Width)
+	}
+	if picture.Height != expectedHeight {
+		t.Errorf("Expected height %d, but was %d", expectedHeight, picture.Height)
+	}
+}
