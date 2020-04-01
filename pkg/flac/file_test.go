@@ -126,6 +126,28 @@ func TestPassCorrectSizeStartAndLastBlockInfoToVorbisComment(t *testing.T) {
 	}
 }
 
+func TestPassCorrectSizeStartAndLastBlockInfoToFirstPicture(t *testing.T) {
+	expectedNumberOfBytes := uint32(9925)
+	expectedStartIndex := 1817
+	fileReader := NewFileReader(MockStreamInfo{})
+
+	file, _ := fileReader.ReadFile(filePath)
+
+	firstPicture := file.Picture[0]
+	blockLength := firstPicture.BlockInfo.length
+	start := firstPicture.BlockInfo.startIndex
+	isLastBlock := firstPicture.BlockInfo.isLastBlock
+	if blockLength != expectedNumberOfBytes {
+		t.Errorf("Expected size of picture %d, but was %d", expectedNumberOfBytes, blockLength)
+	}
+	if start != expectedStartIndex {
+		t.Errorf("Expected start index of picture %d, but was %d", expectedNumberOfBytes, start)
+	}
+	if isLastBlock {
+		t.Error("picture should not be the latest block of the metadata")
+	}
+}
+
 type MockStreamInfo struct{}
 
 func (mock MockStreamInfo) Read(_ []byte) {

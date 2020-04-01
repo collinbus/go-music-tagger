@@ -11,11 +11,12 @@ type File struct {
 	StreamInfo    *StreamInfo
 	SeekTable     *SeekTable
 	VorbisComment *VorbisComment
+	Picture       []Picture
 	Size          int
 }
 
 func NewFile(size int) *File {
-	return &File{Size: size}
+	return &File{Size: size, Picture: []Picture{}}
 }
 
 type BlockInfo struct {
@@ -63,6 +64,10 @@ func (f *File) readMetaData(data []byte, blockId int, info *BlockInfo) {
 	case 4:
 		f.VorbisComment = NewVorbisComment(info)
 		f.VorbisComment.Read(data[start:end])
+	case 6:
+		picture := NewPicture(info)
+		picture.Read(data)
+		f.Picture = append(f.Picture, *picture)
 	}
 }
 
