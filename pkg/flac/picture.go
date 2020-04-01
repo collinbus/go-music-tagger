@@ -19,13 +19,15 @@ func NewPicture(blockInfo *BlockInfo) *Picture {
 }
 
 func (p *Picture) Read(data []byte) {
-	var index int
-	var end int
+	var index = p.BlockInfo.startIndex
+	var end = index + 4
 
-	p.PictureType = readBigEndianUint32(data[0:4], 0)
+	p.PictureType = readBigEndianUint32(data[index:end], 0)
 
-	index = 8
-	mimeTypeLength := readBigEndianUint32(data[4:8], 0)
+	index = end
+	end = index + 4
+	mimeTypeLength := readBigEndianUint32(data[index:end], 0)
+	index = end
 	end = index + int(mimeTypeLength)
 	p.MimeType = bytes.NewBuffer(data[index:end]).String()
 

@@ -26,12 +26,12 @@ func (vc *VorbisComment) Read(data []byte) {
 }
 
 func (vc *VorbisComment) updateLength(data []byte, vendorLength uint32) {
-	length := binary.LittleEndian.Uint32(data[sizeOffset+vendorLength : vendorLength+2*sizeOffset])
+	length := readLittleEndianUint32(data[sizeOffset+vendorLength : vendorLength+2*sizeOffset])
 	vc.NumberOfComments = int(length)
 }
 
 func (vc *VorbisComment) readVendor(data []byte) uint32 {
-	vendorLength := binary.LittleEndian.Uint32(data[:sizeOffset])
+	vendorLength := readLittleEndianUint32(data[:sizeOffset])
 	vendorBuffer := bytes.NewBuffer(data[sizeOffset : vendorLength+sizeOffset])
 	vc.Vendor = vendorBuffer.String()
 	return vendorLength

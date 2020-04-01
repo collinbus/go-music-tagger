@@ -27,3 +27,7 @@ func readBigEndianUint64(bytes []byte, startOffset int, endOffset int) uint64 {
 	number := numberWithoutEndOffset >> (startOffset + endOffset)
 	return uint64(number)
 }
+
+func readLittleEndianUint32(data []byte) uint32 {
+	return binary.LittleEndian.Uint32(data)
+}

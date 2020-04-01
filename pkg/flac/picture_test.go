@@ -8,7 +8,7 @@ import (
 func readPictureDataFromFile() (*Picture, []byte) {
 	picture := &Picture{}
 	data, _ := ioutil.ReadFile(filePath)
-	blockInfo := &BlockInfo{length: 1813, startIndex: 608, isLastBlock: false}
+	blockInfo := &BlockInfo{length: 81660, startIndex: 0, isLastBlock: false}
 	picture.BlockInfo = blockInfo
 	return picture, data[1817:11742]
 }
