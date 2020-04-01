@@ -11,6 +11,7 @@ type Picture struct {
 	Height               uint32
 	ColorDepth           uint32
 	IndexedColorPictures uint32
+	PictureData          []byte
 }
 
 func NewPicture(blockInfo *BlockInfo) *Picture {
@@ -50,4 +51,7 @@ func (p *Picture) Read(data []byte) {
 	index = end
 	end += 4
 	p.IndexedColorPictures = readBigEndianUint32(data[index:end], 0)
+
+	index += 8
+	p.PictureData = data[index:]
 }

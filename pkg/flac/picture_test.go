@@ -75,3 +75,15 @@ func TestColorDepthAndIndexedColorPicturesOfPicture(t *testing.T) {
 		t.Errorf("Expected indexed color pictures %d, but was %d", expectedIndexedColorPictures, picture.IndexedColorPictures)
 	}
 }
+
+func TestLengthOfPicturesInBytes(t *testing.T) {
+	expectedLengthOfPictureData := 9883
+	picture, data := readPictureDataFromFile()
+
+	picture.Read(data)
+
+	pictureData := picture.PictureData
+	if len(pictureData) != expectedLengthOfPictureData {
+		t.Errorf("Expected picture data length %d, but was %d", expectedLengthOfPictureData, len(pictureData))
+	}
+}
