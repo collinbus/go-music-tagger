@@ -23,3 +23,14 @@ func TestPictureTypeOfPicture(t *testing.T) {
 		t.Errorf("Expected picture type %d, but was %d", expectedPictureType, picture.PictureType)
 	}
 }
+
+func TestMimeTypeOfPicture(t *testing.T) {
+	expectedMimeType := "image/jpeg"
+	picture, data := readPictureDataFromFile()
+
+	picture.Read(data)
+
+	if picture.MimeType != expectedMimeType {
+		t.Errorf("Expected mime type %s, but was %s", expectedMimeType, picture.MimeType)
+	}
+}
