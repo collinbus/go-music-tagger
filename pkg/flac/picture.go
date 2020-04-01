@@ -3,12 +3,14 @@ package flac
 import "bytes"
 
 type Picture struct {
-	BlockInfo   *BlockInfo
-	PictureType uint32
-	MimeType    string
-	Description string
-	Width       uint32
-	Height      uint32
+	BlockInfo            *BlockInfo
+	PictureType          uint32
+	MimeType             string
+	Description          string
+	Width                uint32
+	Height               uint32
+	ColorDepth           uint32
+	IndexedColorPictures uint32
 }
 
 func NewPicture(blockInfo *BlockInfo) *Picture {
@@ -40,4 +42,12 @@ func (p *Picture) Read(data []byte) {
 	index = end
 	end += 4
 	p.Height = readBigEndianUint32(data[index:end], 0)
+
+	index = end
+	end += 4
+	p.ColorDepth = readBigEndianUint32(data[index:end], 0)
+
+	index = end
+	end += 4
+	p.IndexedColorPictures = readBigEndianUint32(data[index:end], 0)
 }

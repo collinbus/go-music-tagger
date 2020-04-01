@@ -60,3 +60,18 @@ func TestWidthAndHeightInPixelsOfPicture(t *testing.T) {
 		t.Errorf("Expected height %d, but was %d", expectedHeight, picture.Height)
 	}
 }
+
+func TestColorDepthAndIndexedColorPicturesOfPicture(t *testing.T) {
+	expectedColorDepth := uint32(0)
+	expectedIndexedColorPictures := uint32(0)
+	picture, data := readPictureDataFromFile()
+
+	picture.Read(data)
+
+	if picture.ColorDepth != expectedColorDepth {
+		t.Errorf("Expected colordepth %d, but was %d", expectedColorDepth, picture.ColorDepth)
+	}
+	if picture.IndexedColorPictures != expectedIndexedColorPictures {
+		t.Errorf("Expected indexed color pictures %d, but was %d", expectedIndexedColorPictures, picture.IndexedColorPictures)
+	}
+}
