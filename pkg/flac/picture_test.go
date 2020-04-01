@@ -34,3 +34,14 @@ func TestMimeTypeOfPicture(t *testing.T) {
 		t.Errorf("Expected mime type %s, but was %s", expectedMimeType, picture.MimeType)
 	}
 }
+
+func TestDescriptionOfPicture(t *testing.T) {
+	expectedDescription := ""
+	picture, data := readPictureDataFromFile()
+
+	picture.Read(data)
+
+	if picture.Description != expectedDescription {
+		t.Errorf("Expected mime type %s, but was %s", expectedDescription, picture.Description)
+	}
+}
