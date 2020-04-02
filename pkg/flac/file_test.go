@@ -148,6 +148,18 @@ func TestPassCorrectSizeStartAndLastBlockInfoToFirstPicture(t *testing.T) {
 	}
 }
 
+func TestAddCorrectNumberOfBytesAsAudioData(t *testing.T) {
+	expectedAudioSize := 35757252
+	fileReader := NewFileReader(MockStreamInfo{})
+
+	file, _ := fileReader.ReadFile(filePath)
+
+	audioDataLength := len(file.AudioData)
+	if audioDataLength != expectedAudioSize {
+		t.Errorf("Expected audio data length %d, but was %d", expectedAudioSize, audioDataLength)
+	}
+}
+
 type MockStreamInfo struct{}
 
 func (mock MockStreamInfo) Read(_ []byte) {

@@ -8,11 +8,13 @@ import (
 var flacFileIdentifier = []byte{0x66, 0x4C, 0x61, 0x43}
 
 type File struct {
-	StreamInfo    *StreamInfo
-	SeekTable     *SeekTable
-	VorbisComment *VorbisComment
-	Picture       []Picture
-	Size          int
+	StreamInfo     *StreamInfo
+	SeekTable      *SeekTable
+	VorbisComment  *VorbisComment
+	Picture        []Picture
+	Size           int
+	audioDataStart int
+	AudioData      []byte
 }
 
 func NewFile(size int) *File {
@@ -47,6 +49,8 @@ func (fr *FileReader) ReadFile(path string) (*File, error) {
 		flacFile.readMetaData(fileBytes, blockId, blockInfo)
 	}
 
+	flacFile.AudioData = fileBytes[flacFile.audioDataStart:]
+
 	return flacFile, nil
 }
 
@@ -68,6 +72,10 @@ func (f *File) readMetaData(data []byte, blockId int, info *BlockInfo) {
 		picture := NewPicture(info)
 		picture.Read(data)
 		f.Picture = append(f.Picture, *picture)
+	}
+
+	if info.isLastBlock {
+		f.audioDataStart = info.startIndex + int(info.length)
 	}
 }
 
