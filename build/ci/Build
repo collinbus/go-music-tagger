@@ -1,27 +1,18 @@
 pipeline {
     agent any
 
-    // Run on an agent where we want to use Go
-    node {
-        // Install the desired Go version
-        def root = tool name: 'Go 1.8', type: 'go'
-
-        // Export environment variables pointing to the directory where Go was installed
-        withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
-            stages {
-                    stage('Build') {
-                        steps {
-                            echo 'Building Go Music Tagger...'
-                            sh 'go build .'
-                        }
-                    }
-                    stage('Test') {
-                        steps {
-                            sh 'go test -v 2>&1 | go-junit-report > report.xml'
-                        }
-                     }
-                }
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building Go Music Tagger...'
+                sh 'go build .'
+            }
         }
+        stage('Test') {
+            steps {
+                sh 'go test -v 2>&1 | go-junit-report > report.xml'
+            }
+         }
     }
 
     post {
