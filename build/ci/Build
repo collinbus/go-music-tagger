@@ -4,8 +4,20 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Hello World!'
+                echo 'Building Go Music Tagger...'
+                sh 'go build .'
             }
         }
+        stage('Test') {
+            steps {
+                sh 'go test -v 2>&1 | go-junit-report > report.xml'
+            }
+         }
     }
+
+    post {
+        always {
+            junit 'report.xml'
+        }
+     }
 }
