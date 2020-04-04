@@ -27,11 +27,15 @@ type BlockInfo struct {
 	isLastBlock bool
 }
 
-type FileReader struct {
+type FileService struct {
 	metaDataReader MetaDataReader
 }
 
-func (fr *FileReader) ReadFile(path string) (*File, error) {
+type FileReader interface {
+	ReadFile(path string) (*File, error)
+}
+
+func (fr *FileService) ReadFile(path string) (*File, error) {
 	fileBytes, err := ioutil.ReadFile(path)
 
 	if err != nil {
@@ -121,8 +125,8 @@ func isFlacFile(data []byte) bool {
 	return true
 }
 
-func NewFileReader(metaDataReader MetaDataReader) *FileReader {
-	return &FileReader{
+func NewFileService(metaDataReader MetaDataReader) *FileService {
+	return &FileService{
 		metaDataReader: metaDataReader,
 	}
 }

@@ -10,7 +10,7 @@ const emptyFilePath = "../../assets/empty.txt"
 
 func TestReadFileShouldReturnCorrectFileSizeAndBytes(t *testing.T) {
 	expectedFileSize := 35804910
-	fileReader := NewFileReader(MockStreamInfo{})
+	fileReader := NewFileService(MockStreamInfo{})
 
 	file, _ := fileReader.ReadFile(filePath)
 
@@ -22,7 +22,7 @@ func TestReadFileShouldReturnCorrectFileSizeAndBytes(t *testing.T) {
 func TestReadFileShouldReturnErrorWhenPathIsInvalid(t *testing.T) {
 	wrongPath := "a wrong path"
 	expectedError := "open a wrong path: The system cannot find the file specified."
-	fileReader := NewFileReader(MockStreamInfo{})
+	fileReader := NewFileService(MockStreamInfo{})
 
 	_, err := fileReader.ReadFile(wrongPath)
 
@@ -33,7 +33,7 @@ func TestReadFileShouldReturnErrorWhenPathIsInvalid(t *testing.T) {
 
 func TestReadFileShouldFailIfFileIsNotFlacFile(t *testing.T) {
 	expectedError := "file at " + lyricsFilePath + " is not a flac file"
-	fileReader := NewFileReader(MockStreamInfo{})
+	fileReader := NewFileService(MockStreamInfo{})
 
 	_, err := fileReader.ReadFile(lyricsFilePath)
 
@@ -44,7 +44,7 @@ func TestReadFileShouldFailIfFileIsNotFlacFile(t *testing.T) {
 
 func TestReadFileShouldFailIfFileIsTooSmall(t *testing.T) {
 	expectedError := "file at " + emptyFilePath + " is not a flac file"
-	fileReader := NewFileReader(MockStreamInfo{})
+	fileReader := NewFileService(MockStreamInfo{})
 
 	_, err := fileReader.ReadFile(emptyFilePath)
 
@@ -54,7 +54,7 @@ func TestReadFileShouldFailIfFileIsTooSmall(t *testing.T) {
 }
 
 func TestReadFileShouldReadStreamInfoCorrectly(t *testing.T) {
-	fileReader := NewFileReader(MockStreamInfo{})
+	fileReader := NewFileService(MockStreamInfo{})
 
 	file, _ := fileReader.ReadFile(filePath)
 
@@ -66,7 +66,7 @@ func TestReadFileShouldReadStreamInfoCorrectly(t *testing.T) {
 func TestPassCorrectSizeStartAndLastBlockInfoToStreamInfoReader(t *testing.T) {
 	expectedNumberOfBytes := uint32(34)
 	expectedStartIndex := 8
-	fileReader := NewFileReader(MockStreamInfo{})
+	fileReader := NewFileService(MockStreamInfo{})
 
 	file, _ := fileReader.ReadFile(filePath)
 
@@ -87,7 +87,7 @@ func TestPassCorrectSizeStartAndLastBlockInfoToStreamInfoReader(t *testing.T) {
 func TestPassCorrectSizeStartAndLastBlockInfoToSeekTable(t *testing.T) {
 	expectedNumberOfBytes := uint32(558)
 	expectedStartIndex := 46
-	fileReader := NewFileReader(MockStreamInfo{})
+	fileReader := NewFileService(MockStreamInfo{})
 
 	file, _ := fileReader.ReadFile(filePath)
 
@@ -108,7 +108,7 @@ func TestPassCorrectSizeStartAndLastBlockInfoToSeekTable(t *testing.T) {
 func TestPassCorrectSizeStartAndLastBlockInfoToVorbisComment(t *testing.T) {
 	expectedNumberOfBytes := uint32(1205)
 	expectedStartIndex := 608
-	fileReader := NewFileReader(MockStreamInfo{})
+	fileReader := NewFileService(MockStreamInfo{})
 
 	file, _ := fileReader.ReadFile(filePath)
 
@@ -129,7 +129,7 @@ func TestPassCorrectSizeStartAndLastBlockInfoToVorbisComment(t *testing.T) {
 func TestPassCorrectSizeStartAndLastBlockInfoToFirstPicture(t *testing.T) {
 	expectedNumberOfBytes := uint32(9925)
 	expectedStartIndex := 1817
-	fileReader := NewFileReader(MockStreamInfo{})
+	fileReader := NewFileService(MockStreamInfo{})
 
 	file, _ := fileReader.ReadFile(filePath)
 
@@ -150,7 +150,7 @@ func TestPassCorrectSizeStartAndLastBlockInfoToFirstPicture(t *testing.T) {
 
 func TestAddCorrectNumberOfBytesAsAudioData(t *testing.T) {
 	expectedAudioSize := 35757252
-	fileReader := NewFileReader(MockStreamInfo{})
+	fileReader := NewFileService(MockStreamInfo{})
 
 	file, _ := fileReader.ReadFile(filePath)
 
