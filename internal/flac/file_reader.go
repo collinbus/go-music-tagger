@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 )
 
-type FileService struct {
+type FileReaderService struct {
 	metaDataReader MetaDataReader
 }
 
@@ -13,7 +13,7 @@ type FileReader interface {
 	ReadFile(path string) (*File, error)
 }
 
-func (fr *FileService) ReadFile(path string) (*File, error) {
+func (fr *FileReaderService) ReadFile(path string) (*File, error) {
 	fileBytes, err := ioutil.ReadFile(path)
 
 	if err != nil {
@@ -103,8 +103,8 @@ func isFlacFile(data []byte) bool {
 	return true
 }
 
-func NewFileService(metaDataReader MetaDataReader) *FileService {
-	return &FileService{
+func NewFileService(metaDataReader MetaDataReader) *FileReaderService {
+	return &FileReaderService{
 		metaDataReader: metaDataReader,
 	}
 }
