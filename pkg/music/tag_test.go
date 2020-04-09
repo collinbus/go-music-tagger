@@ -2,6 +2,7 @@ package music
 
 import (
 	"go-music-tagger/internal/flac"
+	"reflect"
 	"testing"
 )
 
@@ -11,6 +12,13 @@ const artist = "an_artist"
 const genre = "a_genre"
 const date = "2020"
 const isrc = "an_isrc"
+
+const mimeType = "a_mime_type"
+const height = 500
+const width = 300
+const cover = 3
+
+var albumImage = []byte{0x00, 0x01}
 
 func TestReadTagFromFile(t *testing.T) {
 	tagReader := NewTagReader(&MockFileReader{})
@@ -34,11 +42,41 @@ func TestReadTagFromFile(t *testing.T) {
 	}
 }
 
+func TestReadAlbumArtFromFile(t *testing.T) {
+	tagReader := NewTagReader(&MockFileReader{})
+
+	tag := tagReader.ReadTagFrom("a_file_path")
+
+	albumArt := tag.AlbumArt[0]
+	if albumArt.MimeType != mimeType {
+		t.Errorf("Expected %s, but was %s", mimeType, albumArt.MimeType)
+	}
+	if albumArt.Height != height {
+		t.Errorf("Expected %d, but was %d", height, albumArt.Height)
+	}
+	if albumArt.Width != width {
+		t.Errorf("Expected %d, but was %d", width, albumArt.Width)
+	}
+	if albumArt.AlbumArtType != cover {
+		t.Errorf("Expected %d, but was %d", cover, albumArt.AlbumArtType)
+	}
+	if !reflect.DeepEqual(albumArt.Image, albumImage) {
+		t.Error("The image's binary data is incorrect")
+	}
+}
+
 type MockFileReader struct{}
 
 func (m *MockFileReader) ReadFile(path string) (*flac.File, error) {
 	comments := []string{"title=" + title, "ARTIST=" + artist, "Album=" + album,
 		"genre=" + genre, "date=" + date, "ISRC=" + isrc}
 	vorbisComment := &flac.VorbisComment{Comments: comments}
-	return &flac.File{VorbisComment: vorbisComment}, nil
+	picture := &flac.Picture{
+		PictureType: cover,
+		MimeType:    mimeType,
+		PictureData: albumImage,
+		Width:       width,
+		Height:      height,
+	}
+	return &flac.File{VorbisComment: vorbisComment, Picture: []flac.Picture{*picture}}, nil
 }

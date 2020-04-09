@@ -41,7 +41,21 @@ func (tr *TagReader) ReadTagFrom(filePath string) *Tag {
 		tag.updateWith(keyValuePair)
 	}
 
+	for _, picture := range file.Picture {
+		tag.AlbumArt = append(tag.AlbumArt, decodePicture(picture))
+	}
+
 	return tag
+}
+
+func decodePicture(picture flac.Picture) AlbumArt {
+	return AlbumArt{
+		AlbumArtType: picture.PictureType,
+		MimeType:     picture.MimeType,
+		Image:        picture.PictureData,
+		Width:        picture.Width,
+		Height:       picture.Height,
+	}
 }
 
 func (t *Tag) updateWith(keyValuePair []string) {
