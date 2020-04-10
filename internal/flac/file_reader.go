@@ -5,9 +5,7 @@ import (
 	"io/ioutil"
 )
 
-type FileReaderService struct {
-	metaDataReader MetaDataReader
-}
+type FileReaderService struct{}
 
 type FileReader interface {
 	ReadFile(path string) (*File, error)
@@ -103,8 +101,6 @@ func isFlacFile(data []byte) bool {
 	return true
 }
 
-func NewFileService(metaDataReader MetaDataReader) *FileReaderService {
-	return &FileReaderService{
-		metaDataReader: metaDataReader,
-	}
+func NewFileService() *FileReaderService {
+	return &FileReaderService{}
 }
