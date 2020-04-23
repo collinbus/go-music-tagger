@@ -6,46 +6,38 @@ import (
 	"os"
 )
 
-type FileWriter interface {
-	WriteFile(target string) (bool, error)
-}
+func WriteFile(source File, target string) *os.File {
+	var buffer = make([]byte, 0)
 
-type FileWriterService struct {
-	source *File
-}
+	flacHeader := writeFlacHeader()
+	blockHeader := writeBlockHeader(source.StreamInfo)
+	streamInfo := writeStreamInfoBlock(source.StreamInfo)
 
-func NewFileWriterService(source *File) *FileWriterService {
-	return &FileWriterService{source: source}
-}
+	buffer = append(buffer, flacHeader...)
+	buffer = append(buffer, blockHeader...)
+	buffer = append(buffer, streamInfo...)
 
-func (fs FileWriterService) WriteFile(target string) (bool, error) {
 	newFile, err := os.Create(target)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fs.writeDataTo(newFile)
-	return true, nil
+	_, _ = newFile.Write(buffer)
+	return newFile
 }
 
-func (fs FileWriterService) writeDataTo(file *os.File) {
-	fs.writeFlacHeader(file)
-	fs.writeStreamInfoBlock(fs.source.StreamInfo, file)
-}
-
-func (fs FileWriterService) writeFlacHeader(file *os.File) {
-	_, _ = file.Write([]byte{0x66, 0x4C, 0x61, 0x43})
+func writeFlacHeader() []byte {
+	return []byte{0x66, 0x4C, 0x61, 0x43}
 }
 
 //noinspection GoNilness
-func (fs FileWriterService) writeStreamInfoBlock(info *StreamInfo, file *os.File) {
-	writeBlockInfo(file, info)
+func writeStreamInfoBlock(info *StreamInfo) []byte {
 	var minimumBlockSize = make([]byte, 2)
 	var maximumBlockSize = make([]byte, 2)
 	var minimumFrameSize = make([]byte, 4)
 	var maximumFrameSize = make([]byte, 4)
 	var otherInfoBytes = make([]byte, 8)
 	var md5Signature = info.AudioDataMD5Hash
+	var streamInfo = make([]byte, 0)
 
 	binary.BigEndian.PutUint16(minimumBlockSize, info.MinimumSampleBlockSize)
 	binary.BigEndian.PutUint16(maximumBlockSize, info.MaximumSampleBlockSize)
@@ -63,18 +55,18 @@ func (fs FileWriterService) writeStreamInfoBlock(info *StreamInfo, file *os.File
 
 	binary.BigEndian.PutUint64(otherInfoBytes, otherInfo)
 
-	_, _ = file.Write(minimumBlockSize)
-	_, _ = file.Write(maximumBlockSize)
-	_, _ = file.Write(minimumFrameSize[1:4])
-	_, _ = file.Write(maximumFrameSize[1:4])
-	_, _ = file.Write(otherInfoBytes)
-	_, _ = file.Write(md5Signature)
+	streamInfo = append(streamInfo, minimumBlockSize...)
+	streamInfo = append(streamInfo, maximumBlockSize...)
+	streamInfo = append(streamInfo, minimumFrameSize[1:4]...)
+	streamInfo = append(streamInfo, maximumFrameSize[1:4]...)
+	streamInfo = append(streamInfo, otherInfoBytes...)
+	streamInfo = append(streamInfo, md5Signature...)
+	return streamInfo
 }
 
 //noinspection GoNilness
-func writeBlockInfo(file *os.File, info *StreamInfo) {
-	_, _ = file.Write([]byte{0})
-	var length = make([]byte, 4)
-	binary.BigEndian.PutUint32(length, info.BlockInfo.length)
-	_, _ = file.Write((length)[1:4])
+func writeBlockHeader(info *StreamInfo) []byte {
+	var blockLength = make([]byte, 4)
+	binary.BigEndian.PutUint32(blockLength, info.BlockInfo.length)
+	return blockLength
 }
