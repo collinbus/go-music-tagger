@@ -67,7 +67,7 @@ func readMetaDataBlockInfo(data []byte) map[int]*BlockInfo {
 		blockId := readBlockId(data[index])
 		blockSize := readBigEndianUint32(data[index+1:index+5], 8)
 		isLastBlock := readIsLastBlock(data[index])
-		blocks[blockId] = &BlockInfo{startIndex: index + sizeOffset, length: blockSize, isLastBlock: isLastBlock}
+		blocks[blockId] = NewBlockInfo(index+sizeOffset, blockSize, isLastBlock)
 
 		if isLastBlock {
 			break

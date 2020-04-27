@@ -15,9 +15,3 @@ type File struct {
 func NewFile(size int) *File {
 	return &File{Size: size, Picture: []Picture{}}
 }
-
-type BlockInfo struct {
-	startIndex  int
-	length      uint32
-	isLastBlock bool
-}
