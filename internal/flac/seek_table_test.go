@@ -63,3 +63,35 @@ func TestThirdSeekPointInSeekTable(t *testing.T) {
 		t.Errorf("Expected number of target frames %d, but was %d", expectedNumberOfTargetFrames, seekPoint.NumberOfTargetFrames)
 	}
 }
+
+func TestWriteSeekTable(t *testing.T) {
+	expectedBytes := []byte{0x03, 0x00, 0x00, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x32,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x56, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x13, 0x04, 0x00, 0x2c,
+	}
+	seekPoints := []SeekPoint{{
+		FirstSampleNumber:    8,
+		Offset:               16,
+		NumberOfTargetFrames: 50,
+	}, {
+		FirstSampleNumber:    86,
+		Offset:               4868,
+		NumberOfTargetFrames: 44,
+	}}
+	seekTable := &SeekTable{
+		BlockInfo:          &BlockInfo{startIndex: 4, length: 36, isLastBlock: false},
+		NumberOfSeekPoints: 2,
+		SeekPoints:         seekPoints,
+	}
+
+	points := seekTable.WriteSeekPoints()
+
+	if points == nil {
+		t.Errorf("Seektable bytes should not be nil")
+	}
+
+	for i, b := range points {
+		if b != expectedBytes[i] {
+			t.Errorf("byte at index %d should be %d but was %d", i, expectedBytes[i], b)
+		}
+	}
+}
