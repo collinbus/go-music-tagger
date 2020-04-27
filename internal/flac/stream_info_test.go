@@ -94,3 +94,31 @@ func TestReadMD5AudioDataHashFromFlacStreamInfo(t *testing.T) {
 		}
 	}
 }
+
+func TestWriteStreamInfoBytes(t *testing.T) {
+	expectedBytes := []byte{0x00, 0x00, 0x00, 0x22, 0x10, 0x00, 0x10, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x35, 0x30, 0x0A, 0xC4, 0x42, 0xF0, 0x00, 0xCE, 0xE5, 0xF0, 0x7E, 0x86, 0x3E, 0x21, 0x8C, 0x83, 0x11, 0xE8, 0xE7, 0x35, 0x4F, 0xD1, 0x63, 0xBC, 0xAA, 0xD2}
+	info := StreamInfo{
+		BlockInfo:              &BlockInfo{startIndex: 4, length: 34, isLastBlock: false},
+		MinimumSampleBlockSize: 4096,
+		MaximumSampleBlockSize: 4096,
+		MinimumFrameSize:       14,
+		MaximumFrameSize:       13616,
+		SampleRate:             44100,
+		NumberOfChannels:       2,
+		BitsPerSample:          16,
+		NumberOfSamples:        13559280,
+		AudioDataMD5Hash:       []byte{0x7E, 0x86, 0x3E, 0x21, 0x8C, 0x83, 0x11, 0xE8, 0xE7, 0x35, 0x4F, 0xD1, 0x63, 0xBC, 0xAA, 0xD2},
+	}
+
+	data := info.WriteStreamInfoBlock()
+
+	if data == nil {
+		t.Errorf("The data should not be nil")
+	}
+
+	for i, b := range data {
+		if b != expectedBytes[i] {
+			t.Errorf("byte at index %d should be %d but was %d", i, expectedBytes[i], b)
+		}
+	}
+}
