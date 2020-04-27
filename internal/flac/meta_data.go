@@ -2,10 +2,11 @@ package flac
 
 import "encoding/binary"
 
-type BlockType int
+type BlockType uint32
 
 const (
 	StreamInfoBlock BlockType = 0
+	SeekTableBlock            = 3
 )
 
 type MetaDataReader interface {
@@ -24,7 +25,13 @@ func NewBlockInfo(startIndex int, length uint32, isLastBlock bool) *BlockInfo {
 
 func WriteBlockHeader(isLastBlock bool, blockType BlockType, length uint32) []byte {
 	var blockLength = make([]byte, 4)
-	blockLength[0] = byte(blockType)
 	binary.BigEndian.PutUint32(blockLength, length)
+
+	blockLength[0] = byte(blockType)
+
+	if isLastBlock {
+		blockLength[0] = setBit(blockLength[0], 7)
+	}
+
 	return blockLength
 }

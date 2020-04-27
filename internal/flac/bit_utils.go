@@ -31,3 +31,8 @@ func readBigEndianUint64(bytes []byte, startOffset int, endOffset int) uint64 {
 func readLittleEndianUint32(data []byte) uint32 {
 	return binary.LittleEndian.Uint32(data)
 }
+
+func setBit(b byte, pos uint) byte {
+	b |= 1 << pos
+	return b
+}
