@@ -38,27 +38,20 @@ func (streamInfo *StreamInfo) WriteStreamInfoBlock() []byte {
 	streamInfoBlockLength := streamInfo.BlockInfo.length
 	blockHeader := WriteBlockHeader(false, StreamInfoBlock, streamInfoBlockLength)
 
+	var streamInfoBytes = blockHeader
 	var minimumBlockSize = make([]byte, 2)
 	var maximumBlockSize = make([]byte, 2)
 	var minimumFrameSize = make([]byte, 4)
 	var maximumFrameSize = make([]byte, 4)
 	var otherInfoBytes = make([]byte, 8)
 	var md5Signature = streamInfo.AudioDataMD5Hash
-	var streamInfoBytes = blockHeader
 
 	binary.BigEndian.PutUint16(minimumBlockSize, streamInfo.MinimumSampleBlockSize)
 	binary.BigEndian.PutUint16(maximumBlockSize, streamInfo.MaximumSampleBlockSize)
 	binary.BigEndian.PutUint32(minimumFrameSize, streamInfo.MinimumFrameSize)
 	binary.BigEndian.PutUint32(maximumFrameSize, streamInfo.MaximumFrameSize)
 
-	var otherInfo uint64
-	otherInfo = uint64(streamInfo.SampleRate)
-	otherInfo = otherInfo << 3
-	otherInfo += uint64(streamInfo.NumberOfChannels - 1)
-	otherInfo = otherInfo << 5
-	otherInfo += uint64(streamInfo.BitsPerSample - 1)
-	otherInfo = otherInfo << 36
-	otherInfo += streamInfo.NumberOfSamples
+	otherInfo := createOtherInfoBytes(streamInfo)
 
 	binary.BigEndian.PutUint64(otherInfoBytes, otherInfo)
 
@@ -69,4 +62,16 @@ func (streamInfo *StreamInfo) WriteStreamInfoBlock() []byte {
 	streamInfoBytes = append(streamInfoBytes, otherInfoBytes...)
 	streamInfoBytes = append(streamInfoBytes, md5Signature...)
 	return streamInfoBytes
+}
+
+func createOtherInfoBytes(streamInfo *StreamInfo) uint64 {
+	var otherInfo uint64
+	otherInfo = uint64(streamInfo.SampleRate)
+	otherInfo = otherInfo << 3
+	otherInfo += uint64(streamInfo.NumberOfChannels - 1)
+	otherInfo = otherInfo << 5
+	otherInfo += uint64(streamInfo.BitsPerSample - 1)
+	otherInfo = otherInfo << 36
+	otherInfo += streamInfo.NumberOfSamples
+	return otherInfo
 }
