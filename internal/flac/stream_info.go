@@ -34,12 +34,6 @@ func (streamInfo *StreamInfo) Read(data []byte) {
 	streamInfo.AudioDataMD5Hash = data[18:34]
 }
 
-func (streamInfo *StreamInfo) WriteBlockHeader() []byte {
-	var blockLength = make([]byte, 4)
-	binary.BigEndian.PutUint32(blockLength, streamInfo.BlockInfo.length)
-	return blockLength
-}
-
 func (streamInfo *StreamInfo) WriteStreamInfoBlock() []byte {
 	streamInfoBlockLength := streamInfo.BlockInfo.length
 	blockHeader := WriteBlockHeader(false, StreamInfoBlock, streamInfoBlockLength)
