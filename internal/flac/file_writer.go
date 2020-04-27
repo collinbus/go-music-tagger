@@ -9,11 +9,9 @@ func WriteFile(source File, target string) *os.File {
 	var buffer = make([]byte, 0)
 
 	flacHeader := writeFlacHeader()
-	blockHeader := source.StreamInfo.WriteBlockHeader()
 	streamInfo := source.StreamInfo.WriteStreamInfoBlock()
 
 	buffer = append(buffer, flacHeader...)
-	buffer = append(buffer, blockHeader...)
 	buffer = append(buffer, streamInfo...)
 
 	newFile, err := os.Create(target)
