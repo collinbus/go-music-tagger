@@ -34,8 +34,7 @@ func (s *SeekTable) Read(data []byte) {
 }
 
 func (s *SeekTable) WriteSeekPoints() []byte {
-	seekTableBlockLength := s.BlockInfo.length
-	buffer := WriteBlockHeader(false, SeekTableBlock, seekTableBlockLength)
+	buffer := make([]byte, 0)
 
 	for _, sp := range s.SeekPoints {
 		var firstSample = make([]byte, 8)
@@ -51,5 +50,7 @@ func (s *SeekTable) WriteSeekPoints() []byte {
 		buffer = append(buffer, numberOfSamples...)
 	}
 
-	return buffer
+	blockSize := len(buffer)
+	blockHeader := WriteBlockHeader(false, SeekTableBlock, uint32(blockSize))
+	return append(blockHeader, buffer...)
 }

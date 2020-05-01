@@ -87,6 +87,12 @@ func TestWriteSeekTable(t *testing.T) {
 
 	if points == nil {
 		t.Errorf("Seektable bytes should not be nil")
+		return
+	}
+
+	if points[3] != 0x24 {
+		t.Errorf("Block length should be %d but was %d", 36, points[3])
+		return
 	}
 
 	for i, b := range points {
