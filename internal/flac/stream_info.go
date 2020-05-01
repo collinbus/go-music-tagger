@@ -2,6 +2,8 @@ package flac
 
 import "encoding/binary"
 
+const streamInfoLength = 34
+
 type StreamInfo struct {
 	BlockInfo              *BlockInfo
 	MinimumSampleBlockSize uint16
@@ -35,8 +37,7 @@ func (streamInfo *StreamInfo) Read(data []byte) {
 }
 
 func (streamInfo *StreamInfo) WriteStreamInfoBlock() []byte {
-	streamInfoBlockLength := streamInfo.BlockInfo.length
-	blockHeader := WriteBlockHeader(false, StreamInfoBlock, streamInfoBlockLength)
+	blockHeader := WriteBlockHeader(false, StreamInfoBlock, streamInfoLength)
 
 	var streamInfoBytes = blockHeader
 	var minimumBlockSize = make([]byte, 2)
