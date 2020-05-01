@@ -6,6 +6,7 @@ import (
 )
 
 const sizeOffset = 4
+const vendor = "go-music-tagger v0.0.1"
 
 type VorbisComment struct {
 	BlockInfo        *BlockInfo
@@ -46,4 +47,32 @@ func (vc *VorbisComment) readComments(data []byte) {
 		comment := bytes.NewBuffer(data[start:index]).String()
 		vc.Comments = append(vc.Comments, comment)
 	}
+}
+
+func (vc *VorbisComment) WriteVorbisComments() []byte {
+	buffer := make([]byte, 0)
+	vendorBytes := bytes.NewBufferString(vendor).Bytes()
+
+	vendorLength := make([]byte, 4)
+	binary.LittleEndian.PutUint32(vendorLength, uint32(len(vendorBytes)))
+
+	commentsLength := make([]byte, 4)
+	binary.LittleEndian.PutUint32(commentsLength, uint32(vc.NumberOfComments))
+
+	buffer = append(buffer, vendorLength...)
+	buffer = append(buffer, vendorBytes...)
+	buffer = append(buffer, commentsLength...)
+
+	for _, comment := range vc.Comments {
+		commentBytes := bytes.NewBufferString(comment).Bytes()
+		commentLength := make([]byte, 4)
+		binary.LittleEndian.PutUint32(commentLength, uint32(len(commentBytes)))
+
+		buffer = append(buffer, commentLength...)
+		buffer = append(buffer, commentBytes...)
+	}
+
+	blockSize := len(buffer)
+	blockHeader := WriteBlockHeader(false, VorbisCommentBlock, uint32(blockSize))
+	return append(blockHeader, buffer...)
 }

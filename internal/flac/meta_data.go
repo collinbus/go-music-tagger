@@ -5,8 +5,9 @@ import "encoding/binary"
 type BlockType uint32
 
 const (
-	StreamInfoBlock BlockType = 0
-	SeekTableBlock            = 3
+	StreamInfoBlock    BlockType = 0
+	SeekTableBlock               = 3
+	VorbisCommentBlock           = 4
 )
 
 type MetaDataReader interface {
