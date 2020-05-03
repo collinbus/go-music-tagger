@@ -19,11 +19,15 @@ func WriteFile(source File, target string) *os.File {
 		pictureData = append(pictureData, pictureBytes...)
 	}
 
+	padding := CreatePadding(len(buffer), source.audioDataStart)
+
 	buffer = append(buffer, flacHeader...)
 	buffer = append(buffer, streamInfo...)
 	buffer = append(buffer, seekPoints...)
 	buffer = append(buffer, vorbisComments...)
 	buffer = append(buffer, pictureData...)
+	buffer = append(buffer, padding...)
+	buffer = append(buffer, source.AudioData...)
 
 	newFile, err := os.Create(target)
 	if err != nil {
