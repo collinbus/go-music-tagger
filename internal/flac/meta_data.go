@@ -8,6 +8,7 @@ const (
 	StreamInfoBlock    BlockType = 0
 	SeekTableBlock               = 3
 	VorbisCommentBlock           = 4
+	PictureBlock                 = 6
 )
 
 type MetaDataReader interface {
