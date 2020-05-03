@@ -43,8 +43,12 @@ func (p *Picture) Read(data []byte) {
 	index, end = p.updateIndexForNextBlock(index, end)
 	p.IndexedColorPictures = readBigEndianUint32(data[index:end], 0)
 
-	index += 8
-	p.PictureData = data[index:]
+	index, end = p.updateIndexForNextBlock(index, end)
+	pictureDataLength := int(readBigEndianUint32(data[index:end], 0))
+
+	index = end
+	end += pictureDataLength
+	p.PictureData = data[index:end]
 }
 
 func (p *Picture) updateMimeType(index int, end int, data []byte) (int, int) {
