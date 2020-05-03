@@ -6,6 +6,7 @@ type BlockType uint32
 
 const (
 	StreamInfoBlock    BlockType = 0
+	PaddingBlock                 = 1
 	SeekTableBlock               = 3
 	VorbisCommentBlock           = 4
 	PictureBlock                 = 6
