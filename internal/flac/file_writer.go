@@ -11,10 +11,19 @@ func WriteFile(source File, target string) *os.File {
 	flacHeader := writeFlacHeader()
 	streamInfo := source.StreamInfo.WriteStreamInfoBlock()
 	seekPoints := source.SeekTable.WriteSeekPoints()
+	vorbisComments := source.VorbisComment.WriteVorbisComments()
+	pictureData := make([]byte, 0)
+
+	for _, picture := range source.Picture {
+		pictureBytes := picture.WritePicture()
+		pictureData = append(pictureData, pictureBytes...)
+	}
 
 	buffer = append(buffer, flacHeader...)
 	buffer = append(buffer, streamInfo...)
 	buffer = append(buffer, seekPoints...)
+	buffer = append(buffer, vorbisComments...)
+	buffer = append(buffer, pictureData...)
 
 	newFile, err := os.Create(target)
 	if err != nil {
