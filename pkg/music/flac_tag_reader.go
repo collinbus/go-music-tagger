@@ -24,17 +24,7 @@ type AlbumArt struct {
 	Height       uint32
 }
 
-type TagReader struct {
-	fileReader flac.FileReader
-}
-
-func NewTagReader(fileReader flac.FileReader) *TagReader {
-	return &TagReader{fileReader: fileReader}
-}
-
-func (tr *TagReader) ReadTagFrom(filePath string) *Tag {
-	file, _ := tr.fileReader.ReadFile(filePath)
-
+func ReadTagFrom(file *flac.File) *Tag {
 	tag := &Tag{}
 	for _, comment := range file.VorbisComment.Comments {
 		keyValuePair := strings.Split(comment, "=")

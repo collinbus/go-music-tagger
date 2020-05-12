@@ -21,9 +21,7 @@ const cover = 3
 var albumImage = []byte{0x00, 0x01}
 
 func TestReadTagFromFile(t *testing.T) {
-	tagReader := NewTagReader(&MockFileReader{})
-
-	tag := tagReader.ReadTagFrom("a_file_path")
+	tag := ReadTagFrom(aFlacFile())
 
 	if tag.Title != title {
 		t.Errorf("Expected %s, but was %s", title, tag.Title)
@@ -43,9 +41,7 @@ func TestReadTagFromFile(t *testing.T) {
 }
 
 func TestReadAlbumArtFromFile(t *testing.T) {
-	tagReader := NewTagReader(&MockFileReader{})
-
-	tag := tagReader.ReadTagFrom("a_file_path")
+	tag := ReadTagFrom(aFlacFile())
 
 	albumArt := tag.AlbumArt[0]
 	if albumArt.MimeType != mimeType {
@@ -65,9 +61,7 @@ func TestReadAlbumArtFromFile(t *testing.T) {
 	}
 }
 
-type MockFileReader struct{}
-
-func (m *MockFileReader) ReadFile(path string) (*flac.File, error) {
+func aFlacFile() *flac.File {
 	comments := []string{"title=" + title, "ARTIST=" + artist, "Album=" + album,
 		"genre=" + genre, "date=" + date, "ISRC=" + isrc}
 	vorbisComment := &flac.VorbisComment{Comments: comments}
@@ -78,5 +72,5 @@ func (m *MockFileReader) ReadFile(path string) (*flac.File, error) {
 		Width:       width,
 		Height:      height,
 	}
-	return &flac.File{VorbisComment: vorbisComment, Picture: []flac.Picture{*picture}}, nil
+	return &flac.File{VorbisComment: vorbisComment, Picture: []flac.Picture{*picture}}
 }
