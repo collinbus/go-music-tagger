@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-const flacFileExtension = "flac"
+const flacFileExtension = ".flac"
 
 func ReadTagFrom(path string) *Tag {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
