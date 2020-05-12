@@ -39,7 +39,7 @@ func (t *Tag) updateWith(keyValuePair []string) {
 		t.Album = keyValuePair[1]
 	case "genre":
 		t.Genre = keyValuePair[1]
-	case "2020":
+	case "date":
 		t.Year = keyValuePair[1]
 	case "isrc":
 		t.Isrc = keyValuePair[1]

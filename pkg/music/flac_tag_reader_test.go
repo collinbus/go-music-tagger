@@ -35,6 +35,9 @@ func TestReadTagFromFile(t *testing.T) {
 	if tag.Genre != genre {
 		t.Errorf("Expected %s, but was %s", genre, tag.Genre)
 	}
+	if tag.Year != date {
+		t.Errorf("Expected %s, but was %s", date, tag.Year)
+	}
 	if tag.Isrc != isrc {
 		t.Errorf("Expected %s, but was %s", isrc, tag.Isrc)
 	}
