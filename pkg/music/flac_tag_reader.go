@@ -5,26 +5,7 @@ import (
 	"strings"
 )
 
-type Tag struct {
-	Title       string
-	Artists     []string
-	Album       string
-	TrackNumber int
-	Genre       string
-	Year        string
-	Isrc        string
-	AlbumArt    []AlbumArt
-}
-
-type AlbumArt struct {
-	AlbumArtType uint32
-	MimeType     string
-	Image        []byte
-	Width        uint32
-	Height       uint32
-}
-
-func ReadTagFrom(file *flac.File) *Tag {
+func readTagFrom(file *flac.File) *Tag {
 	tag := &Tag{}
 	for _, comment := range file.VorbisComment.Comments {
 		keyValuePair := strings.Split(comment, "=")

@@ -21,7 +21,7 @@ const cover = 3
 var albumImage = []byte{0x00, 0x01}
 
 func TestReadTagFromFile(t *testing.T) {
-	tag := ReadTagFrom(aFlacFile())
+	tag := readTagFrom(aFlacFile())
 
 	if tag.Title != title {
 		t.Errorf("Expected %s, but was %s", title, tag.Title)
@@ -41,7 +41,7 @@ func TestReadTagFromFile(t *testing.T) {
 }
 
 func TestReadAlbumArtFromFile(t *testing.T) {
-	tag := ReadTagFrom(aFlacFile())
+	tag := readTagFrom(aFlacFile())
 
 	albumArt := tag.AlbumArt[0]
 	if albumArt.MimeType != mimeType {
