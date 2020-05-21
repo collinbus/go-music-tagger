@@ -44,6 +44,36 @@ func TestWriteFlacFileFromTag(t *testing.T) {
 	}
 }
 
+func TestWriteFlacFileWithAlbumArtWithTag(t *testing.T) {
+	expectedMimeType := "image/jpeg"
+	expectedPictureData := []byte{0x04, 0x08}
+	expectedWidth := uint32(50)
+	expectedHeight := uint32(60)
+	tag := NewTag(title, artists, album, trackNumber, genre, date, isrc, albumArt())
+
+	flacTag := writeFlacTag(flac.NewFile(256), tag)
+	pictures := flacTag.Picture
+
+	if pictures[0].PictureType != cover {
+		t.Errorf("Picture type should be %d but was %d", cover, pictures[0].PictureType)
+	}
+	if pictures[0].MimeType != expectedMimeType {
+		t.Errorf("Mime type should be %s but was %s", expectedMimeType, pictures[0].MimeType)
+	}
+	if pictures[0].PictureData[0] != expectedPictureData[0] {
+		t.Errorf("Expected picture data at [0] should be %d but was %d", expectedPictureData, pictures[0].PictureData[0])
+	}
+	if pictures[0].PictureData[1] != expectedPictureData[1] {
+		t.Errorf("Expected picture data at [1] should be %d but was %d", expectedPictureData, pictures[0].PictureData[1])
+	}
+	if pictures[0].Width != expectedWidth {
+		t.Errorf("Width should be %d but was %d", expectedWidth, pictures[0].Width)
+	}
+	if pictures[0].Height != expectedHeight {
+		t.Errorf("Width should be %d but was %d", expectedHeight, pictures[0].Height)
+	}
+}
+
 func albumArt() []AlbumArt {
 	albumArt := make([]AlbumArt, 1)
 	imgData := []byte{0x04, 0x08}
