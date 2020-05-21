@@ -3,10 +3,23 @@ package main
 import (
 	"fmt"
 	"go-music-tagger/pkg/music"
+	"log"
+	"os"
 )
 
 func main() {
-	tag := music.ReadTagFrom("C:\\Users\\Collin\\go\\src\\go-music-tagger\\assets\\new-clocks.flac")
+	if len(os.Args) < 2 {
+		log.Fatal("Please enter provide an input argument")
+	}
+	tag := music.ReadTagFrom(os.Args[1])
+	printTags(tag)
+	tag.TrackNumber = 5
+	music.WriteFileFrom(os.Args[1], tag)
+	newTag := music.ReadTagFrom(os.Args[1])
+	printTags(newTag)
+}
+
+func printTags(tag *music.Tag) {
 	fmt.Println(tag.Title)
 	fmt.Println(tag.Artists[0])
 	fmt.Println(tag.Album)

@@ -21,8 +21,7 @@ func ReadTagFrom(path string) *Tag {
 }
 
 func readFlacFile(file string) *Tag {
-	fileService := flac.NewFileService()
-	flacFile, err := fileService.ReadFile(file)
+	flacFile, err := flac.ReadFile(file)
 
 	if err != nil {
 		log.Fatal(err)

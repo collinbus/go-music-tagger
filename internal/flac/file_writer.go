@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func WriteFile(source File, target string) *os.File {
+func WriteFile(source *File, target string) *os.File {
 	var buffer = make([]byte, 0)
 
 	flacHeader := writeFlacHeader()

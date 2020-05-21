@@ -1,13 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"go-music-tagger/internal/flac"
+	"log"
+	"os"
 )
 
 func main() {
-	fmt.Println("Go Music Tagger")
-	service := flac.NewFileService()
-	file, _ := service.ReadFile("C:\\Users\\Collin\\go\\src\\go-music-tagger\\assets\\clocks.flac")
-	_ = flac.WriteFile(*file, "C:\\Users\\Collin\\go\\src\\go-music-tagger\\assets\\new-clocks.flac")
+	if len(os.Args) < 3 {
+		log.Fatal("Please enter provide an input and output argument")
+	}
+	file, _ := flac.ReadFile(os.Args[1])
+	_ = flac.WriteFile(file, os.Args[2])
 }
