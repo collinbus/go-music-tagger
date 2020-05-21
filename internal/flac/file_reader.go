@@ -51,7 +51,7 @@ func (f *File) readMetaData(data []byte, blockId int, info *BlockInfo) {
 	case 6:
 		picture := NewPicture(info)
 		picture.Read(data)
-		f.Picture = append(f.Picture, *picture)
+		f.Pictures = append(f.Pictures, *picture)
 	}
 
 	if info.isLastBlock {

@@ -6,12 +6,12 @@ type File struct {
 	StreamInfo     *StreamInfo
 	SeekTable      *SeekTable
 	VorbisComment  *VorbisComment
-	Picture        []Picture
+	Pictures       []Picture
 	Size           int
 	audioDataStart int
 	AudioData      []byte
 }
 
 func NewFile(size int) *File {
-	return &File{Size: size, Picture: []Picture{}}
+	return &File{Size: size, Pictures: []Picture{}}
 }

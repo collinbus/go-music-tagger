@@ -14,7 +14,7 @@ func WriteFile(source File, target string) *os.File {
 	vorbisComments := source.VorbisComment.WriteVorbisComments()
 	pictureData := make([]byte, 0)
 
-	for _, picture := range source.Picture {
+	for _, picture := range source.Pictures {
 		pictureBytes := picture.WritePicture()
 		pictureData = append(pictureData, pictureBytes...)
 	}

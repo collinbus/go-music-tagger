@@ -4,7 +4,7 @@ import "go-music-tagger/internal/flac"
 
 func writeFlacTag(file *flac.File, tag *Tag) *flac.File {
 	file.VorbisComment = createVorbisComments(tag.stringValues())
-	file.Picture = createPictures(tag.AlbumArt)
+	file.Pictures = createPictures(tag.AlbumArt)
 	return file
 }
 

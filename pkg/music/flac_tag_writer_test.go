@@ -52,10 +52,10 @@ func TestWriteFlacFileWithAlbumArtWithTag(t *testing.T) {
 	tag := NewTag(title, artists, album, trackNumber, genre, date, isrc, albumArt())
 
 	flacTag := writeFlacTag(flac.NewFile(256), tag)
-	pictures := flacTag.Picture
+	pictures := flacTag.Pictures
 
 	if pictures[0].PictureType != cover {
-		t.Errorf("Picture type should be %d but was %d", cover, pictures[0].PictureType)
+		t.Errorf("Pictures type should be %d but was %d", cover, pictures[0].PictureType)
 	}
 	if pictures[0].MimeType != expectedMimeType {
 		t.Errorf("Mime type should be %s but was %s", expectedMimeType, pictures[0].MimeType)

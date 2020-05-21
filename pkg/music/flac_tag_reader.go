@@ -12,7 +12,7 @@ func readTagFrom(file *flac.File) *Tag {
 		tag.updateWith(keyValuePair)
 	}
 
-	for _, picture := range file.Picture {
+	for _, picture := range file.Pictures {
 		tag.AlbumArt = append(tag.AlbumArt, decodePicture(picture))
 	}
 

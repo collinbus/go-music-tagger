@@ -75,5 +75,5 @@ func aFlacFile() *flac.File {
 		Width:       width,
 		Height:      height,
 	}
-	return &flac.File{VorbisComment: vorbisComment, Picture: []flac.Picture{*picture}}
+	return &flac.File{VorbisComment: vorbisComment, Pictures: []flac.Picture{*picture}}
 }

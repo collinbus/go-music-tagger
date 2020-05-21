@@ -137,7 +137,7 @@ func TestPassCorrectSizeStartAndLastBlockInfoToFirstPicture(t *testing.T) {
 
 	file, _ := fileReader.ReadFile(filePath)
 
-	firstPicture := file.Picture[0]
+	firstPicture := file.Pictures[0]
 	blockLength := firstPicture.BlockInfo.length
 	start := firstPicture.BlockInfo.startIndex
 	isLastBlock := firstPicture.BlockInfo.isLastBlock
