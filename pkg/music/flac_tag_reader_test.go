@@ -12,6 +12,7 @@ const artist = "an_artist"
 const genre = "a_genre"
 const date = "2020"
 const isrc = "an_isrc"
+const trackNumber = 1
 
 const mimeType = "a_mime_type"
 const height = 500
@@ -41,6 +42,9 @@ func TestReadTagFromFile(t *testing.T) {
 	if tag.Isrc != isrc {
 		t.Errorf("Expected %s, but was %s", isrc, tag.Isrc)
 	}
+	if tag.TrackNumber != trackNumber {
+		t.Errorf("Expected %d, but was %d", trackNumber, tag.TrackNumber)
+	}
 }
 
 func TestReadAlbumArtFromFile(t *testing.T) {
@@ -66,7 +70,7 @@ func TestReadAlbumArtFromFile(t *testing.T) {
 
 func aFlacFile() *flac.File {
 	comments := []string{"title=" + title, "ARTIST=" + artist, "Album=" + album,
-		"genre=" + genre, "date=" + date, "ISRC=" + isrc}
+		"genre=" + genre, "date=" + date, "ISRC=" + isrc, "tracknumber=1"}
 	vorbisComment := &flac.VorbisComment{Comments: comments}
 	picture := &flac.Picture{
 		PictureType: cover,

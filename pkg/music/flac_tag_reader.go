@@ -2,6 +2,7 @@ package music
 
 import (
 	"go-music-tagger/internal/flac"
+	"strconv"
 	"strings"
 )
 
@@ -37,6 +38,9 @@ func (t *Tag) updateWith(keyValuePair []string) {
 		t.Artists = append(t.Artists, keyValuePair[1])
 	case "album":
 		t.Album = keyValuePair[1]
+	case "tracknumber":
+		trackNumber, _ := strconv.Atoi(keyValuePair[1])
+		t.TrackNumber = trackNumber
 	case "genre":
 		t.Genre = keyValuePair[1]
 	case "date":

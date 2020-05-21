@@ -7,8 +7,6 @@ import (
 
 var artists = []string{"an_artist", "a_featuring_artist"}
 
-const trackNumber = 1
-
 func TestWriteFlacFileFromTag(t *testing.T) {
 	expectedComments := []string{
 		"title=" + title,
