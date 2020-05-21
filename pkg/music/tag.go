@@ -11,10 +11,59 @@ type Tag struct {
 	AlbumArt    []AlbumArt
 }
 
+func (tag *Tag) stringValues() []string {
+	tagValues := make([]string, 0)
+	tagValues = append(tagValues, tag.Title)
+	tagValues = append(tagValues, tag.Artists...)
+	tagValues = append(tagValues, tag.Album)
+	tagValues = append(tagValues, string(tag.TrackNumber))
+	tagValues = append(tagValues, tag.Genre)
+	tagValues = append(tagValues, tag.Year)
+	tagValues = append(tagValues, tag.Isrc)
+	return tagValues
+}
+
+func NewTag(title string,
+	artists []string,
+	album string,
+	trackNumber int,
+	genre string,
+	year string,
+	isrc string,
+	albumArt []AlbumArt,
+) *Tag {
+	return &Tag{
+		Title:       title,
+		Artists:     artists,
+		Album:       album,
+		TrackNumber: trackNumber,
+		Genre:       genre,
+		Year:        year,
+		Isrc:        isrc,
+		AlbumArt:    albumArt,
+	}
+}
+
 type AlbumArt struct {
 	AlbumArtType uint32
 	MimeType     string
 	Image        []byte
 	Width        uint32
 	Height       uint32
+}
+
+func NewAlbumArt(
+	albumArtType uint32,
+	mimeType string,
+	image []byte,
+	width uint32,
+	height uint32,
+) *AlbumArt {
+	return &AlbumArt{
+		AlbumArtType: albumArtType,
+		MimeType:     mimeType,
+		Image:        image,
+		Width:        width,
+		Height:       height,
+	}
 }
