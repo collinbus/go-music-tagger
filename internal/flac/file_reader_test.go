@@ -1,6 +1,7 @@
 package flac
 
 import (
+	"runtime"
 	"testing"
 )
 
@@ -21,7 +22,10 @@ func TestReadFileShouldReturnCorrectFileSizeAndBytes(t *testing.T) {
 
 func TestReadFileShouldReturnErrorWhenPathIsInvalid(t *testing.T) {
 	wrongPath := "a wrong path"
-	expectedError := "open a wrong path: The system cannot find the file specified."
+	expectedError := "open a wrong path: no such file or directory"
+	if runtime.GOOS == "windows" {
+		expectedError = "open a wrong path: The system cannot find the file specified."
+	}
 	fileReader := NewFileService()
 
 	_, err := fileReader.ReadFile(wrongPath)
