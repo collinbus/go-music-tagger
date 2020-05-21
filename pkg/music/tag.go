@@ -1,5 +1,7 @@
 package music
 
+import "strings"
+
 type Tag struct {
 	Title       string
 	Artists     []string
@@ -21,6 +23,23 @@ func (tag *Tag) stringValues() []string {
 	tagValues = append(tagValues, tag.Year)
 	tagValues = append(tagValues, tag.Isrc)
 	return tagValues
+}
+
+func (t *Tag) updateWith(keyValuePair []string) {
+	switch strings.ToLower(keyValuePair[0]) {
+	case "title":
+		t.Title = keyValuePair[1]
+	case "artist":
+		t.Artists = append(t.Artists, keyValuePair[1])
+	case "album":
+		t.Album = keyValuePair[1]
+	case "genre":
+		t.Genre = keyValuePair[1]
+	case "date":
+		t.Year = keyValuePair[1]
+	case "isrc":
+		t.Isrc = keyValuePair[1]
+	}
 }
 
 func NewTag(title string,
