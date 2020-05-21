@@ -28,3 +28,20 @@ func decodePicture(picture flac.Picture) AlbumArt {
 		Height:       picture.Height,
 	}
 }
+
+func (t *Tag) updateWith(keyValuePair []string) {
+	switch strings.ToLower(keyValuePair[0]) {
+	case "title":
+		t.Title = keyValuePair[1]
+	case "artist":
+		t.Artists = append(t.Artists, keyValuePair[1])
+	case "album":
+		t.Album = keyValuePair[1]
+	case "genre":
+		t.Genre = keyValuePair[1]
+	case "date":
+		t.Year = keyValuePair[1]
+	case "isrc":
+		t.Isrc = keyValuePair[1]
+	}
+}
