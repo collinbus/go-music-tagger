@@ -11,18 +11,6 @@ type Tag struct {
 	AlbumArt    []AlbumArt
 }
 
-func (tag *Tag) stringValues() []string {
-	tagValues := make([]string, 0)
-	tagValues = append(tagValues, tag.Title)
-	tagValues = append(tagValues, tag.Artists...)
-	tagValues = append(tagValues, tag.Album)
-	tagValues = append(tagValues, string(tag.TrackNumber))
-	tagValues = append(tagValues, tag.Genre)
-	tagValues = append(tagValues, tag.Year)
-	tagValues = append(tagValues, tag.Isrc)
-	return tagValues
-}
-
 func NewTag(title string,
 	artists []string,
 	album string,
