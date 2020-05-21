@@ -11,9 +11,8 @@ const emptyFilePath = "../../assets/empty.txt"
 
 func TestReadFileShouldReturnCorrectFileSizeAndBytes(t *testing.T) {
 	expectedFileSize := 35804910
-	fileReader := NewFileService()
 
-	file, _ := fileReader.ReadFile(filePath)
+	file, _ := ReadFile(filePath)
 
 	if file.Size != expectedFileSize {
 		t.Errorf("File size should be %d but was %d", expectedFileSize, file.Size)
@@ -26,9 +25,8 @@ func TestReadFileShouldReturnErrorWhenPathIsInvalid(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		expectedError = "open a wrong path: The system cannot find the file specified."
 	}
-	fileReader := NewFileService()
 
-	_, err := fileReader.ReadFile(wrongPath)
+	_, err := ReadFile(wrongPath)
 
 	if err == nil || err.Error() != expectedError {
 		t.Errorf("Read file should return error: %s", expectedError)
@@ -37,9 +35,8 @@ func TestReadFileShouldReturnErrorWhenPathIsInvalid(t *testing.T) {
 
 func TestReadFileShouldFailIfFileIsNotFlacFile(t *testing.T) {
 	expectedError := "file at " + lyricsFilePath + " is not a flac file"
-	fileReader := NewFileService()
 
-	_, err := fileReader.ReadFile(lyricsFilePath)
+	_, err := ReadFile(lyricsFilePath)
 
 	if err == nil || err.Error() != expectedError {
 		t.Errorf("Read file should return error: %s", expectedError)
@@ -48,9 +45,8 @@ func TestReadFileShouldFailIfFileIsNotFlacFile(t *testing.T) {
 
 func TestReadFileShouldFailIfFileIsTooSmall(t *testing.T) {
 	expectedError := "file at " + emptyFilePath + " is not a flac file"
-	fileReader := NewFileService()
 
-	_, err := fileReader.ReadFile(emptyFilePath)
+	_, err := ReadFile(emptyFilePath)
 
 	if err == nil || err.Error() != expectedError {
 		t.Errorf("Read file should return error: %s", expectedError)
@@ -58,9 +54,7 @@ func TestReadFileShouldFailIfFileIsTooSmall(t *testing.T) {
 }
 
 func TestReadFileShouldReadStreamInfoCorrectly(t *testing.T) {
-	fileReader := NewFileService()
-
-	file, _ := fileReader.ReadFile(filePath)
+	file, _ := ReadFile(filePath)
 
 	if file.StreamInfo == nil {
 		t.Error("Stream info should not be nil")
@@ -70,9 +64,8 @@ func TestReadFileShouldReadStreamInfoCorrectly(t *testing.T) {
 func TestPassCorrectSizeStartAndLastBlockInfoToStreamInfoReader(t *testing.T) {
 	expectedNumberOfBytes := uint32(34)
 	expectedStartIndex := 8
-	fileReader := NewFileService()
 
-	file, _ := fileReader.ReadFile(filePath)
+	file, _ := ReadFile(filePath)
 
 	blockLength := file.StreamInfo.BlockInfo.length
 	start := file.StreamInfo.BlockInfo.startIndex
@@ -91,9 +84,8 @@ func TestPassCorrectSizeStartAndLastBlockInfoToStreamInfoReader(t *testing.T) {
 func TestPassCorrectSizeStartAndLastBlockInfoToSeekTable(t *testing.T) {
 	expectedNumberOfBytes := uint32(558)
 	expectedStartIndex := 46
-	fileReader := NewFileService()
 
-	file, _ := fileReader.ReadFile(filePath)
+	file, _ := ReadFile(filePath)
 
 	blockLength := file.SeekTable.BlockInfo.length
 	start := file.SeekTable.BlockInfo.startIndex
@@ -112,9 +104,8 @@ func TestPassCorrectSizeStartAndLastBlockInfoToSeekTable(t *testing.T) {
 func TestPassCorrectSizeStartAndLastBlockInfoToVorbisComment(t *testing.T) {
 	expectedNumberOfBytes := uint32(1205)
 	expectedStartIndex := 608
-	fileReader := NewFileService()
 
-	file, _ := fileReader.ReadFile(filePath)
+	file, _ := ReadFile(filePath)
 
 	blockLength := file.VorbisComment.BlockInfo.length
 	start := file.VorbisComment.BlockInfo.startIndex
@@ -133,9 +124,8 @@ func TestPassCorrectSizeStartAndLastBlockInfoToVorbisComment(t *testing.T) {
 func TestPassCorrectSizeStartAndLastBlockInfoToFirstPicture(t *testing.T) {
 	expectedNumberOfBytes := uint32(9925)
 	expectedStartIndex := 1817
-	fileReader := NewFileService()
 
-	file, _ := fileReader.ReadFile(filePath)
+	file, _ := ReadFile(filePath)
 
 	firstPicture := file.Pictures[0]
 	blockLength := firstPicture.BlockInfo.length
@@ -154,9 +144,8 @@ func TestPassCorrectSizeStartAndLastBlockInfoToFirstPicture(t *testing.T) {
 
 func TestAddCorrectNumberOfBytesAsAudioData(t *testing.T) {
 	expectedAudioSize := 35757252
-	fileReader := NewFileService()
 
-	file, _ := fileReader.ReadFile(filePath)
+	file, _ := ReadFile(filePath)
 
 	audioDataLength := len(file.AudioData)
 	if audioDataLength != expectedAudioSize {

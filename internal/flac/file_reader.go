@@ -5,13 +5,7 @@ import (
 	"io/ioutil"
 )
 
-type FileReaderService struct{}
-
-type FileReader interface {
-	ReadFile(path string) (*File, error)
-}
-
-func (fr *FileReaderService) ReadFile(path string) (*File, error) {
+func ReadFile(path string) (*File, error) {
 	fileBytes, err := ioutil.ReadFile(path)
 
 	if err != nil {
@@ -99,8 +93,4 @@ func isFlacFile(data []byte) bool {
 		}
 	}
 	return true
-}
-
-func NewFileService() *FileReaderService {
-	return &FileReaderService{}
 }
