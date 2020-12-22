@@ -1,4 +1,4 @@
-package music
+package tagging
 
 import (
 	"go-music-tagger/internal/flac"

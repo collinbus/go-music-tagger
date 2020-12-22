@@ -1,4 +1,4 @@
-package music
+package tagging
 
 type Tag struct {
 	Title       string
