@@ -9,13 +9,9 @@ import (
 
 const flacFileExtension = ".flac"
 
-func ReadTagFrom(path string) *Tag {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		log.Fatal(err)
-	}
-
-	if filepath.Ext(path) == flacFileExtension {
-		return readFlacFile(path)
+func ReadTagFrom(musicFile *os.File) *Tag {
+	if filepath.Ext(musicFile.Name()) == flacFileExtension {
+		return readFlacFile(musicFile.Name())
 	}
 	return nil
 }

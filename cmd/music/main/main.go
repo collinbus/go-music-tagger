@@ -11,11 +11,15 @@ func main() {
 	if len(os.Args) < 2 {
 		log.Fatal("Please provide an input argument")
 	}
-	tag := tagging.ReadTagFrom(os.Args[1])
+	file, err := os.Open(os.Args[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	tag := tagging.ReadTagFrom(file)
 	printTags(tag)
 	tag.TrackNumber = 5
 	tagging.WriteFileFrom(os.Args[1], tag)
-	newTag := tagging.ReadTagFrom(os.Args[1])
+	newTag := tagging.ReadTagFrom(file)
 	printTags(newTag)
 }
 
