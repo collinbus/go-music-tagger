@@ -8,7 +8,7 @@ import (
 
 func main() {
 	if len(os.Args) < 3 {
-		log.Fatal("Please enter provide an input and output argument")
+		log.Fatal("Please provide an input and output argument")
 	}
 	file, _ := flac.ReadFile(os.Args[1])
 	_ = flac.WriteFile(file, os.Args[2])
