@@ -9,7 +9,7 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		log.Fatal("Please enter provide an input argument")
+		log.Fatal("Please provide an input argument")
 	}
 	tag := music.ReadTagFrom(os.Args[1])
 	printTags(tag)
